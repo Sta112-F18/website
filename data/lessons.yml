@@ -1,0 +1,27 @@
+lessons:
+- title: "Week 01"
+- date: "Tue, Aug 28"
+  title: "Welcome to Data Science"
+  slides: "u1_d01-welcome/u1_d01-welcome.html"
+  appex: "ae-01-unvotes.html"
+- date: "PART 1:"
+  title: "Visualizing and wrangling data"
+- date: "Thur, Aug 30"
+  title: "Meet the toolkit"
+  hw: "hw-01.html"
+  reading: "reading-01.html"
+  
+- date: "..."
+  
+- date: "Tue, Oct 5"
+  title: "Midterm 1"
+  exam: "exam-01.html"
+
+- date: "Tue, Nov 13"
+  title: "Midterm 2"
+  exam: "exam-02.html"
+  
+- date: "Fri, Dec 14"
+  title: "Final project presentations"
+  project: "project.html"
+  
