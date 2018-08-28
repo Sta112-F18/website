@@ -1,5 +1,5 @@
 ---
-title: "Welcome to Data Science"
+title: "Welcome to Data Science <br> 🙌"
 author: ""
 output:
   xaringan::moon_reader:
@@ -100,6 +100,18 @@ A: We can discuss that over `r emo::ji("coffee")`.
 
 ---
 
+## Where is this course?
+
+<br><br><br><br><br><br><br>
+
+.large[
+.center[
+[bit.ly/sta112-f18](http://bit.ly/sta112-f18)
+]
+]
+
+---
+
 class: center, middle
 
 # Data in the wild
@@ -149,6 +161,18 @@ http://varianceexplained.org/r/trump-tweets/
 ]
 .pull-right[
 ![Trump tweets](img/david-robinson-trump-tweets.png)
+]
+
+---
+
+## Greatest Twitter scheme of all time
+
+```{r fig.width=15, fig.height=12, fig.align="center", echo=FALSE}
+knitr::include_graphics("img/bohemian-rhapsody.png")
+```
+
+.small[
+https://gist.github.com/mine-cetinkaya-rundel/03d7516dea1e5f2613a5d71c28edb08d
 ]
 
 ---
@@ -213,114 +237,7 @@ Once done, place a green sticky on your laptop. If you have questions, place a p
 
 ---
 
-class: center, middle
-
-# Course structure and policies
-
----
-
-## Class meetings
-
-- Interactive
-- Some lectures, lots of learn-by-doing
-- Bring your laptop to class every day
-
----
-
-## Diversity & Inclusiveness:
-
-.midi[
-**Intent:** Students from all diverse backgrounds and perspectives be well-served by this course, that students' learning needs be addressed both in and out of class, and that the diversity that the students bring to this class be viewed as a resource, strength and benefit. It is my intent to present materials and activities that are respectful of diversity: gender identity, sexuality, disability, age, socioeconomic status, ethnicity, race, nationality, religion, and culture. Let me know ways to improve the effectiveness of the course for you personally, or for other students or student groups.
-]
-
---
-
-- If you have a name and/or set of pronouns that differ from those that appear in your official Duke records, please let me know.
-- If you feel your performance is being impacted by your experiences outside of class, please don't hesitate to come and talk with me. If you prefer to speak with someone outside of the course, your academic dean is an excellent resource. 
-- I (like many people) am still in the process of learning about diverse perspectives/identities. If something was said in class (by anyone) that made you feel uncomfortable, please talk to me about it.
-
----
-
-## How to get help
-
-- Course content, logistics, etc. discussion on course Slack.
-- Often it's a lot more pleasant an experience to get your questions answered in person. Make use of the teaching team's office hours, we're here to help!
-- For personal and grade related questions, use email.
-
----
-
-## Tips for asking questions
-
-- First search existing discussion for answers. If the question has already been answered, you're done! If it has already been asked but you're not satisfied with the answer, add to the thread. 
-- Give your question context from course concepts not couse assignments.
-    - Good context: "I have a question on filtering"
-    - Bad context: "I have a question on HW 1 question 4"
-- Be precise in your description:
-    - Good description: "I am getting the following error and I'm not sure how to resolve it - `Error: could not find function "ggplot"`"
-    - Bad description: "R giving errors, help me! Aaaarrrrrgh!” 
-- You can edit a question after posting it.
-
----
-
-## Tips for asking questions
-
-- Format your questions nicely using markdown and code formatting.
-- Where appropriate, provide links to specific files, or even lines within them, in the body of your issue. This will help your helper understand your question. Note that only the teaching team will have access to private repos.
-- (Optional) Tag someone or some group of people. Start by typing the @ symbol and Slack will generate some suggestions. 
-    
----
-
-## Academic integrity
-
-- Only work that is clearly assigned as team work can be completed collaboratively.
-- Use of disallowed materials during the take home exam will not be tolerated.
-
----
-
-## Sharing/reusing code
-
-- I am well aware that a huge volume of code is available on the web to solve any number of problems.
-- Unless I explicitly tell you not to use something the course's policy is that you may make use of any online resources (e.g. StackOverflow) but you must explicitly cite where you obtained any code you directly use (or use as inspiration). 
-- Any recycled code that is discovered and is not explicitly cited will be treated as plagiarism. 
-- On individual assignments you may not directly share code with another student in this class, and on team assignments you may not directly share code with another team in this class. 
-- Except for the take home exams, you are welcome to discuss the problems together and ask for advice, but you may not send or make use of code from another team.
-- On the take home exams all communication with classmates is explicitly forbidden.
-
----
-
-## Course components:
-
-- Teams: 3-4 person teams, based on survey and pretest results, consistent throughout the semester
-- Application exercises: Usually start in class and finish in teams by the next class period, check/no check
-- Homework: Individual, lowest score dropped
-- Lab: Team, lowest score dropped
-- Exams: Individual, two take home midterms
-- Final project: Team, presentations during scheduled final exam time (last day of finals!), you must participate in the project and be in class to present to pass this class
-- Self paced tutorials: Individual, check/no check
-
----
-
-## Grading
-
-- Weights of each component are given in the syllabus.
-- Class attendance is a firm expectation; frequent absences or tardiness 
-will be considered a legitimate cause for grade reduction.
-- Exact ranges for letter grades will be curved and cutoffs will be 
-determined after the final exam.
-- The more evidence there is that the class has mastered the material, the 
-more generous the curve will be.
-
----
-
-## Other policies
-
-- Please refrain from texting or using your computer for anything other than coursework during class.
-- You must be in class on a day when you're scheduled to present, there are no make ups for presentations.
-
----
-
 ## Join Slack
 
 - Go to http://bit.ly/sta112-slack-join and join course Slack.
 - Download the Slack app and keep it open.
-
