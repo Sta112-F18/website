@@ -22,4 +22,4 @@ knitr::include_graphics("img/hw-01-check.jpg")
   - Do your best but don't worry if you don't know the answers to the questions or if you aren't sure. 
   - We will only use this information for determining the statistical background of students and for team formation, along with other pieces of information we collected from you in the "Getting to know you" survey.
   - Go [here](https://urldefense.proofpoint.com/v2/url?u=https-3A__apps3.cehd.umn.edu_artist_user_scale-5Fselect.html&d=DwIBAg&c=imBPVzF25OnBgGmVOlcsiEgHoG1i6YHLR0Sj_gZ4adc&r=VMaFnDxOO7DFh_jmcYrq6Oi2_V_d1YoR6dsQ-kCSJjw&m=vANxgQYHuOU8DGPrqtDNuOga8DxVIhjJhKMTrNiet-8&s=wKC-mJiFGfG388o1bV-GNC_3cKPoiOtN3z6xZMxcz8E&e=
-) and enter the following access code: `KIA3773LRG`.
+) and enter the following access code: `LQW4848FLF`.
