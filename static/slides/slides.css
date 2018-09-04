@@ -78,8 +78,11 @@ a, a > code {
   clear: both;
 }
 .question {
-  background-color: #E1ECF8;
-  padding: 0.25px;
+  border-left: solid 5px #1E5C65;
+  background-color: #1E5C6530;
+  padding: 1px 16px;
+  margin-top: 12px;
+  margin-bottom: 12px;
 }
 .instructions {
   border-left: solid 5px #FFD748;
