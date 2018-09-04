@@ -9,9 +9,12 @@ lessons:
 - date: "Thur, Aug 30"
   title: "Meet the toolkit"
   slides: "u1_d02-meet-the-toolkit/u1_d02-meet-the-toolkit.html"
-  hw: "hw-01.html"
+  hw: "hw-01/hw-01.html"
   reading: "reading-01.html"
-  
+  appex: "ae-02-bechdel.html"
+- date: "Tue, Sep 4"
+  title: "Data and visualization"
+  hw: "hw-02/hw-02.html"
 - date: "..."
   
 - date: "Tue, Oct 5"
