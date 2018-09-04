@@ -54,7 +54,7 @@ Remember the Duke Community Standard that you have agreed to abide by:
 > - I will conduct myself honorably in all my endeavors; and
 > - I will act if the Standard is compromised.
 
-Cheating on exams or plagiarism on homework assignments, lying about an illness or absence and other forms of academic dishonesty are a breach of trust with classmates and faculty, violate the <a href="http://www.studentaffairs.duke.edu/conduct/resources/dcs">Duke Community Standard</a>, and will not be tolerated. Such incidences will result in a 0 grade for all parties involved.  Additionally, there may be penalties to your final class grade along with being reported to the <a href="http://www.studentaffairs.duke.edu/conduct/about/ucbhearings">Undergraduate Conduct Board</a>.
+Cheating on exams or plagiarism on homework assignments, lying about an illness or absence and other forms of academic dishonesty are a breach of trust with classmates and faculty, violate the <a href="https://studentaffairs.duke.edu/conduct/about-us/duke-community-standard">Duke Community Standard</a>, and will not be tolerated. Such incidences will result in a 0 grade for all parties involved.  Additionally, there may be penalties to your final class grade along with being reported to the <a href="https://studentaffairs.duke.edu/conduct/undergraduate-disciplinary-system">Office of Student Conduct</a>.
 
 Please review the Academic Dishonesty policies <a href="https://studentaffairs.duke.edu/conduct">here</a>. 
 - Only work that is clearly assigned as team work can be completed collaboratively.
@@ -99,9 +99,8 @@ Your final grade will be comprised of the following:
 Participation         | 5%
 Application exercises | 5%
 Peer evaluation       | 5%
-Homework              | 35%
-Midterm 1             | 15%
-Midterm 2             | 15%
+Homework              | 30%
+Midterms              | 35% (higher 20%, lower 15%)
 Final project         | 20%
 
 Class attendance in lecture and lab is a firm expectation; frequent absences or tardiness will be considered a legitimate cause for grade reduction.
