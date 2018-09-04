@@ -1,21 +1,20 @@
 ---
 title: "HW 01 - Course logistics"
-date: "Due: Aug 30 at 10am"
+date: "Due: Aug 30 at 10:05am"
 output: 
-  html_document: 
-    css: hw.css
-    theme: yeti
-    toc: true
-    toc_float: true
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: ../hw.css
 ---
 
 <div style= "float:right;position: relative; margin-left: 20px">
-```{r setup, echo=FALSE, fig.align="right"}
-knitr::include_graphics("img/hw-01-check.jpg")
+```{r setup, echo=FALSE, fig.align="right", out.width=500}
+knitr::include_graphics("img/check.jpg")
 ```
 </div>
 
-# Assignment
+# Tasks
 
 1. Complete the [getting to know you survey](https://sakai.duke.edu/samigo-app/servlet/Login?id=6fa7ebf3-01af-42a6-91ba-3e813d3901221535437494765) on Sakai.
 2. Complete the statistical reasoning pretest.
