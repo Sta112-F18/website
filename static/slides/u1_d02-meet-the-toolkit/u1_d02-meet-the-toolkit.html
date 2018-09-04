@@ -51,9 +51,13 @@ class: center, middle
 
 ## How to get help
 
-- Course content, logistics, etc. discussion on course Slack.
+- Course content, logistics, etc. discussion on course Slack &lt;i class="fab fa-slack-hash"&gt;&lt;/i&gt;.
+    - Please post on the #questions channel instead of direct messaging.
+    - Use proper formatting: When asking questions involving code, please make sure to use inline code formatting for short bits of code or code snippets for longer, multi-line chunks.
+       - Formatting messages: https://get.slack.help/hc/en-us/articles/202288908-Format-your-messages
+       - Code snippets: https://get.slack.help/hc/en-us/articles/204145658-Creating-a-Snippet
 - Often it's a lot more pleasant an experience to get your questions answered in person. Make use of the teaching team's office hours, we're here to help!
-- For personal and grade related questions, use email.
+- For personal and grade related questions, direct message me on Slack or use email.
 
 ---
 
@@ -98,12 +102,11 @@ class: center, middle
 
 ## Course components:
 
-- Teams: 3-4 person teams, based on survey and pretest results, consistent throughout the semester
+- Teams: 3-4 person teams, initially based on survey and pretest results, will change throughout the semester
 - Application exercises: Usually start in class and finish in teams by the next class period, check/no check
 - Homework: Individual, lowest score dropped
-- Lab: Team, lowest score dropped
 - Exams: Individual, two take home midterms
-- Final project: Team, presentations during scheduled final exam time (last day of finals!), you must participate in the project and be in class to present to pass this class
+- Final project: Team, presentations during scheduled final exam time, you must participate in the project and be in class to present to pass this class
 - Self paced tutorials: Individual, check/no check
 
 ---
@@ -113,8 +116,7 @@ class: center, middle
 - Weights of each component are given in the syllabus.
 - Class attendance is a firm expectation; frequent absences or tardiness 
 will be considered a legitimate cause for grade reduction.
-- Exact ranges for letter grades will be curved and cutoffs will be 
-determined after the final exam.
+- Cumulative numerical averages of 90 - 100 are guaranteed at least an A-, 80 - 89 at least a B-, and 70 - 79 at least a C-, however the exact ranges for letter grades will be determined after the final exam.
 - The more evidence there is that the class has mastered the material, the 
 more generous the curve will be.
 
@@ -129,27 +131,17 @@ more generous the curve will be.
 
 class: center, middle
 
-# A reproducible data analysis
-
----
-
-## Let's talk about burritos!
-
-&lt;iframe src="https://giphy.com/embed/6587R2Pda6iFW" width="853" height="480" frameBorder="0" class="giphy-embed" allowFullScreen&gt;&lt;/iframe&gt;&lt;p&gt;&lt;a href="https://giphy.com/gifs/burrito-6587R2Pda6iFW"&gt;via GIPHY&lt;/a&gt;&lt;/p&gt;
-
----
-
-## Recap: What did we just do?
-
-- Locate a repository on **GitHub**
-- Clone and open the project in **RStudio**
-- Run the analysis using **R Markdown**
-- Edit the analysis to exclude reviews from "Other" reviewers using **R** syntax
-- Re-run the analysis using **R Markdown**
+# Reproducible data analysis
 
 ---
 
 ## Reproducibility checklist
+
+.question[
+What does it mean for a data analysis to be "reproducible"?
+]
+
+--
 
 Near-term goals:
 
@@ -185,6 +177,15 @@ class: center, middle
 
 - R is a statistical programming language
 - RStudio is a convenient interface for R (an integreated development environment, IDE)
+- At its simplest:&lt;sup&gt;➥&lt;/sup&gt;
+    - R is like a car’s engine
+    - RStudio is like a car’s dashboard
+
+&lt;img src="img/engine-dashboard.png" width="420" style="display: block; margin: auto;" /&gt;
+
+.footnote[
+➥ Source: [Modern Dive](https://moderndive.com/)
+]
 
 ---
 
@@ -213,7 +214,7 @@ Concepts introduced:
 
 A short list (for now):
 
-- Functions are (most often) verbs, followed by what they will be applied to in paramtheses:
+- Functions are (most often) verbs, followed by what they will be applied to in parantheses:
 
 
 ```r
@@ -242,19 +243,19 @@ library(package_name)
 
 ---
 
-## What is the Tidyverse?
+## tidyverse
 
 .pull-left[
 ![](img/tidyverse.png)
 ]
 
 .pull-right[
-&lt;center&gt;
-&lt;a href="https://www.tidyverse.org/"&gt;tidyverse.org&lt;/a&gt;
-&lt;/center&gt;
+.center[
+[tidyverse.org](https://www.tidyverse.org/)
+]
 
 - The tidyverse is an opinionated collection of R packages designed for data science. 
-- All packages share an underlying philosophy and a common syntax. 
+- All packages share an underlying philosophy and a common grammar. 
 ]
 
 ---
@@ -300,7 +301,7 @@ The Bechdel test asks whether a work of fiction features at least two women who 
 
 Concepts introduced:
 
-- Forking a project of mine: "Bechdel"
+- Copying a project of mine
 - Knitting documents
 - R Markdown and (some) R syntax
 
@@ -326,103 +327,6 @@ Concepts introduced:
 - Every assignment / report / project / etc. is an R Markdown document
 - You'll always have a template R Markdown document to start with
 - The amount of scaffolding in the template will decrease over the semester
-
----
-
-class: center, middle
-
-# Git and GitHub
-
----
-
-## How do we collaborate?
-
-- The statistical programming language we'll use is R
-- The software we use to interface with R is RStudio
-- But how do I get you the course materials that you can build on for your assignments?
-    + Hint: I'm not going to email you documents, that would be a mess!
-  
----
-
-## Version control
-
-- We introduced GitHub as a platform for collaboration
-- But it's much more than that...
-- It's actually desiged for version control
-
----
-
-## Versioning
-
-![Lego versions](img/lego-steps.png)
-
----
-
-## Versioning
-
-with human readable messages
-
-![Lego versions with commit messages](img/lego-steps-commit-messages.png)
-
----
-
-## Why do we need version control?
-
-.center[
-![PhD Comics](img/phd_comics_vc.gif)
-]
-
----
-
-# Git and GitHub tips
-
-- Git is a version control system -- like “Track Changes” features from Microsoft Word on steroids. GitHub is the home for your Git-based projects on the internet -- like DropBox but much, much better).
---
-
-- There are millions of git commands -- ok, that's an exaggeration, but there are a lot of them -- and very few people know them all. 99% of the time you will use git to add, commit, push, and pull.
---
-
-- We will be doing Git things and interfacing with GitHub through RStudio, but if you google for help you might come accross methods for doing these things in the command line -- skip that and move on to the next resource unless you feel comfortable trying it out.
-
---
-- There is a great resource for working with git and R: [happygitwithr.com](http://happygitwithr.com/). Some of the content in there is beyond the scope of this course, but it's a good place to look for help.
-
----
-
-## Let's take a tour -- Git / GitHub
-
-&lt;br&gt;&lt;br&gt;
-
-.center[
-DEMO
-]
-
-&lt;br&gt;&lt;br&gt;
-
-Concepts introduced:
-
-- Connect an R project to Github repository
-- Working with a local and remote repository
-- Committing, Pushing and Pulling
-
-There is just a bit more of GitHub that we'll use in this class, but for today this is enough.
-
----
-
-class: center, middle
-
-# Recap
-
----
-
-## Recap
-
-Can you answer these questions?
-
-- What is reproducible data analysis, and why do we care?
-- What is version control, and why do we care?
-- What is R vs RStudio?
-- What is git vs GitHub (and do I need to care)?
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
