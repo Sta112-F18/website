@@ -13,23 +13,23 @@ library(tidyverse)
 library(dsbox)
 ```
 
-### Filter for bike crashes in Residential development areas where driver age group is 0 to 19
+### Filter for bike crashes in Residential development areas where driver age group is 0 to 19.
 
-```{r eval=FALSE}
+```{r filter-age, eval=FALSE}
 ncbikecrash %>%
   ___
 ```
 
-### Identify the most commonly occurring driver estimated speed group
+### Identify the most commonly occurring estimated speed for drivers.
 
-```{r eval=FALSE}
+```{r speed, eval=FALSE}
 ncbikecrash %>%
   ___
 ```
 
-### Remove text like `A:`, `B:`, etc. from the `bike_injury` variable and save the result in a new variable called `bike_injury_rec`, and check your work
+### Remove text like `A:`, `B:`, etc. from the `bike_injury` variable and save the result in a new variable called `bike_injury_rec`, and check your work.
 
-```{r eval=FALSE}
+```{r relabel, eval=FALSE}
 ncbikecrash <- ncbikecrash %>%
   ___
 ```
