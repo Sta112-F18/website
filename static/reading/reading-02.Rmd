@@ -1,0 +1,19 @@
+---
+title: "Reading 02"
+date: "Due: Sep 6 at 10am"
+output: 
+  html_document: 
+    theme: yeti
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+- [OpenIntro Statistics](https://drive.google.com/file/d/0B-DHaDEbiOGkc1RycUtIcUtIelE/view):
+    + Section 1.6: Examining numerical data
+    + Section 1.7: Considering categorical data
+
+- [What's so hard about histograms?](http://tinlizzie.org/histograms/)
+
+- R4DS: [Data Visualization](http://r4ds.had.co.nz/data-visualisation.html)
