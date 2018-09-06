@@ -710,11 +710,11 @@ ncbikecrash %&gt;%
 ```r
 ncbikecrash_n5 &lt;- ncbikecrash %&gt;%
   sample_n(5, replace = FALSE)
-dim(ncbikecrash)
+dim(ncbikecrash_n5)
 ```
 
 ```
-## [1] 7467   66
+## [1]  5 66
 ```
 
 - `sample_frac`: randomly sample 20% of observations
@@ -870,6 +870,22 @@ ncbikecrash %&gt;%
 ## 6 &lt;NA&gt;                                &lt;NA&gt;                             6654
 ```
 
+
+```r
+ncbikecrash %&gt;% 
+  count(driver_alcohol_drugs_simplified)
+```
+
+```
+## # A tibble: 4 x 2
+##   driver_alcohol_drugs_simplified     n
+##   &lt;chr&gt;                           &lt;int&gt;
+## 1 Missing                            99
+## 2 No                                695
+## 3 Yes                                19
+## 4 &lt;NA&gt;                             6654
+```
+
 ---
 
 class: center, middle
@@ -880,8 +896,9 @@ class: center, middle
 
 ## `ae-04-ncbikecrash`
 
-- `pt-01`: Locate the project on RStudio Cloud, make a copy, complete the exercises
-- `pt-02`: Locate the repository on GitHub, and then...
+But, not so fast...
+
+Let's first talk a bit about Git and GitHub.
 
 ---
 
@@ -935,6 +952,8 @@ with human readable messages
 ---
 
 ## Let's take a tour -- Git / GitHub
+
+`ae-04-ncbikecrash`
 
 Concepts introduced:
 
