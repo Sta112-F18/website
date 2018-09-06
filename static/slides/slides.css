@@ -84,6 +84,13 @@ a, a > code {
   margin-top: 12px;
   margin-bottom: 12px;
 }
+.alert {
+  border-right: solid 5px #A7D5E8;
+  background-color: #A7D5E830;
+  padding: 1px 16px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
 .instructions {
   border-left: solid 5px #FFD748;
   background-color: #FFD74850;
