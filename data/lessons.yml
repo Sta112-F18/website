@@ -16,6 +16,7 @@ lessons:
   title: "Data and visualization"
   slides: "u1_d02-data-and-visualization/u1_d02-data-and-visualization.html"
   hw: "hw-02/hw-02.html"
+  appex: "ae-03-starwars.html"
 - date: "Thur, Sep 6"
   reading: "reading-02.html"
 - date: "Tue, Sep 11"

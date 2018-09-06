@@ -1,0 +1,24 @@
+---
+title: "Visualizing Starwars Characters"
+author: "Mine Cetinkaya-Rundel"
+date: "9/4/2018"
+output: 
+  html_document: 
+    fig_height: 4
+    fig_width: 10
+---
+
+```{r load-packages, include=FALSE}
+library(tidyverse)
+```
+
+### Modify the following plot to change the color of all points to `"pink"`.
+
+```{r starwars-plot}
+ggplot(data = starwars, 
+       mapping = aes(x = height, y = mass, 
+                     color = gender, size = birth_year)) +
+  geom_point()
+```
+
+### Stretch goal: Add title and x, y, and size labels.
