@@ -1,0 +1,35 @@
+---
+title: "NC bike crashes"
+author: "Mine Cetinkaya-Rundel"
+date: "2018-09-06"
+output: 
+  html_document: 
+    fig_height: 4
+    fig_width: 10
+---
+
+```{r load-packages, include=FALSE}
+library(tidyverse)
+library(dsbox)
+```
+
+### Filter for bike crashes in Residential development areas where driver age group is 0 to 19
+
+```{r eval=FALSE}
+ncbikecrash %>%
+  ___
+```
+
+### Identify the most commonly occurring driver estimated speed group
+
+```{r eval=FALSE}
+ncbikecrash %>%
+  ___
+```
+
+### Remove text like `A:`, `B:`, etc. from the `bike_injury` variable and save the result in a new variable called `bike_injury_rec`, and check your work
+
+```{r eval=FALSE}
+ncbikecrash <- ncbikecrash %>%
+  ___
+```

@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tidy data and data wrangling   🔧</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Dr. Çetinkaya-Rundel" />
+    <link href="libs/font-awesome/css/fa-svg-with-js.css" rel="stylesheet" />
+    <script src="libs/font-awesome/js/fontawesome-all.min.js"></script>
+    <script src="libs/font-awesome/js/fa-v4-shims.min.js"></script>
+    <link rel="stylesheet" href="../slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Tidy data and data wrangling <br> 🔧
+### Dr. Çetinkaya-Rundel
+
+---
+
+
+
+
+
+
+## Announcements
+
+- Consider adding your picture to Slack and GitHub
+- Check your email for an invitation to the course GitHub organization, and join
+- Make use of office hours!
+
+---
+
+class: center, middle
+
+# Tidy data
+
+---
+
+## Tidy data
+
+&gt;Happy families are all alike; every unhappy family is unhappy in its own way. 
+&gt;
+&gt;Leo Tolstoy
+
+--
+
+.pull-left[
+**Characteristics of tidy data:**
+
+- Each variable forms a column.
+- Each observation forms a row.
+- Each type of observational unit forms a table.
+]
+--
+.pull-right[
+**Characteristics of untidy data:**
+
+!@#$%^&amp;*()
+]
+
+---
+
+## Summary tables 
+
+.question[
+Is each of the following a dataset or a summary table?
+]
+
+.small[
+.pull-left[
+
+```
+## # A tibble: 87 x 3
+##    name               height  mass
+##    &lt;chr&gt;               &lt;int&gt; &lt;dbl&gt;
+##  1 Luke Skywalker        172    77
+##  2 C-3PO                 167    75
+##  3 R2-D2                  96    32
+##  4 Darth Vader           202   136
+##  5 Leia Organa           150    49
+##  6 Owen Lars             178   120
+##  7 Beru Whitesun lars    165    75
+##  8 R5-D4                  97    32
+##  9 Biggs Darklighter     183    84
+## 10 Obi-Wan Kenobi        182    77
+## # ... with 77 more rows
+```
+]
+.pull-right[
+
+```
+## # A tibble: 5 x 2
+##   gender        avg_height
+##   &lt;chr&gt;              &lt;dbl&gt;
+## 1 female              165.
+## 2 hermaphrodite       175 
+## 3 male                179.
+## 4 none                200 
+## 5 &lt;NA&gt;                120
+```
+]
+]
+
+---
+
+class: center, middle
+
+# Pipes
+
+---
+
+## Where does the name come from?
+
+The pipe operator is implemented in the package **magrittr**, it's pronounced 
+"and then".
+
+.pull-left[
+![pipe](img//magritte.jpg)
+]
+.pull-right[
+![magrittr](img//magrittr.jpg)
+]
+
+---
+
+## Review: How does a pipe work?
+
+- You can think about the following sequence of actions - find key, 
+unlock car, start car, drive to school, park.
+- Expressed as a set of nested functions in R pseudocode this would look like:
+
+```r
+park(drive(start_car(find("keys")), to = "campus"))
+```
+- Writing it out using pipes give it a more natural (and easier to read) 
+structure:
+
+```r
+find("keys") %&gt;%
+  start_car() %&gt;%
+  drive(to = "campus") %&gt;%
+  park()
+```
+
+---
+
+## What about other arguments?
+
+To send results to a function argument other than first one or to use the previous result for multiple arguments, use `.`:
+
+
+```r
+starwars %&gt;%
+  filter(species == "Human") %&gt;%
+  lm(mass ~ height, data = .)
+```
+
+```
+## 
+## Call:
+## lm(formula = mass ~ height, data = .)
+## 
+## Coefficients:
+## (Intercept)       height  
+##     -116.58         1.11
+```
+
+---
+
+class: center, middle
+
+# Data wrangling
+
+---
+
+## Bike crashes in NC 2007 - 2014
+
+The dataset is in the **dsbox** package:
+
+
+```r
+library(dsbox)
+```
+
+
+
+```r
+ncbikecrash
+```
+
+```
+## # A tibble: 7,467 x 66
+##    object_id city  county region development locality on_road rural_urban
+##        &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;      
+##  1      1686 None… Wayne  Coast… Farms, Woo… Rural (… SR 1915 Rural      
+##  2      1674 Hend… Vance  Piedm… Residential Mixed (… NICHOL… Urban      
+##  3      1673 None… Linco… Piedm… Farms, Woo… Rural (… US 321  Rural      
+##  4      1687 Whit… Colum… Coast… Commercial  Urban (… W BURK… Urban      
+##  5      1653 Wilm… New H… Coast… Residential Urban (… RACINE… Urban      
+##  6      1665 None… Robes… Coast… Farms, Woo… Rural (… SR 1513 Rural      
+##  7      1642 None… Richm… Piedm… Residential Mixed (… SR 1903 Rural      
+##  8      1675 Rale… Wake   Piedm… Commercial  Urban (… PERSON… Urban      
+##  9      1668 Whit… Colum… Coast… Residential Rural (… FLOWER… Urban      
+## 10      1662 New … Craven Coast… Residential Urban (… SUTTON… Urban      
+## # ... with 7,457 more rows, and 58 more variables: speed_limit &lt;chr&gt;,
+## #   traffic_control &lt;chr&gt;, weather &lt;chr&gt;, workzone &lt;chr&gt;, bike_age &lt;chr&gt;,
+## #   bike_age_group &lt;chr&gt;, bike_alcohol &lt;chr&gt;, bike_alcohol_drugs &lt;chr&gt;,
+## #   bike_direction &lt;chr&gt;, bike_injury &lt;chr&gt;, bike_position &lt;chr&gt;,
+## #   bike_race &lt;chr&gt;, bike_sex &lt;chr&gt;, driver_age &lt;chr&gt;,
+## #   driver_age_group &lt;chr&gt;, driver_alcohol &lt;chr&gt;,
+## #   driver_alcohol_drugs &lt;chr&gt;, driver_est_speed &lt;chr&gt;,
+## #   driver_injury &lt;chr&gt;, driver_race &lt;chr&gt;, driver_sex &lt;chr&gt;,
+## #   driver_vehicle_type &lt;chr&gt;, crash_alcohol &lt;chr&gt;, crash_date &lt;chr&gt;,
+## #   crash_day &lt;chr&gt;, crash_group &lt;chr&gt;, crash_hour &lt;int&gt;,
+## #   crash_location &lt;chr&gt;, crash_month &lt;chr&gt;, crash_severity &lt;chr&gt;,
+## #   crash_time &lt;time&gt;, crash_type &lt;chr&gt;, crash_year &lt;int&gt;,
+## #   ambulance_req &lt;chr&gt;, hit_run &lt;chr&gt;, light_condition &lt;chr&gt;,
+## #   road_character &lt;chr&gt;, road_class &lt;chr&gt;, road_condition &lt;chr&gt;,
+## #   road_configuration &lt;chr&gt;, road_defects &lt;chr&gt;, road_feature &lt;chr&gt;,
+## #   road_surface &lt;chr&gt;, num_bikes_ai &lt;int&gt;, num_bikes_bi &lt;int&gt;,
+## #   num_bikes_ci &lt;int&gt;, num_bikes_ki &lt;int&gt;, num_bikes_no &lt;int&gt;,
+## #   num_bikes_to &lt;int&gt;, num_bikes_ui &lt;int&gt;, num_lanes &lt;chr&gt;,
+## #   num_units &lt;int&gt;, distance_mi_from &lt;chr&gt;, frm_road &lt;chr&gt;,
+## #   rte_invd_cd &lt;int&gt;, towrd_road &lt;chr&gt;, geo_point &lt;chr&gt;, geo_shape &lt;chr&gt;
+```
+
+---
+
+## Variables
+
+View the names of variables via
+
+```r
+names(ncbikecrash)
+```
+
+```
+##  [1] "object_id"            "city"                 "county"              
+##  [4] "region"               "development"          "locality"            
+##  [7] "on_road"              "rural_urban"          "speed_limit"         
+## [10] "traffic_control"      "weather"              "workzone"            
+## [13] "bike_age"             "bike_age_group"       "bike_alcohol"        
+## [16] "bike_alcohol_drugs"   "bike_direction"       "bike_injury"         
+## [19] "bike_position"        "bike_race"            "bike_sex"            
+## [22] "driver_age"           "driver_age_group"     "driver_alcohol"      
+## [25] "driver_alcohol_drugs" "driver_est_speed"     "driver_injury"       
+## [28] "driver_race"          "driver_sex"           "driver_vehicle_type" 
+## [31] "crash_alcohol"        "crash_date"           "crash_day"           
+## [34] "crash_group"          "crash_hour"           "crash_location"      
+## [37] "crash_month"          "crash_severity"       "crash_time"          
+## [40] "crash_type"           "crash_year"           "ambulance_req"       
+## [43] "hit_run"              "light_condition"      "road_character"      
+## [46] "road_class"           "road_condition"       "road_configuration"  
+## [49] "road_defects"         "road_feature"         "road_surface"        
+## [52] "num_bikes_ai"         "num_bikes_bi"         "num_bikes_ci"        
+## [55] "num_bikes_ki"         "num_bikes_no"         "num_bikes_to"        
+## [58] "num_bikes_ui"         "num_lanes"            "num_units"           
+## [61] "distance_mi_from"     "frm_road"             "rte_invd_cd"         
+## [64] "towrd_road"           "geo_point"            "geo_shape"
+```
+
+and see detailed descriptions with `?ncbikecrash`.
+
+---
+
+## Viewing your data
+
+- In the Environment, after loading with `data(ncbikecrash)`, and click on the 
+name of the data frame to view it in the data viewer
+- Use the `glimpse` function to take a peek
+
+
+```r
+glimpse(ncbikecrash)
+```
+
+```
+## Observations: 7,467
+## Variables: 66
+## $ object_id            &lt;int&gt; 1686, 1674, 1673, 1687, 1653, 1665, 1642,...
+## $ city                 &lt;chr&gt; "None - Rural Crash", "Henderson", "None ...
+## $ county               &lt;chr&gt; "Wayne", "Vance", "Lincoln", "Columbus", ...
+## $ region               &lt;chr&gt; "Coastal", "Piedmont", "Piedmont", "Coast...
+## $ development          &lt;chr&gt; "Farms, Woods, Pastures", "Residential", ...
+## $ locality             &lt;chr&gt; "Rural (&lt;30% Developed)", "Mixed (30% To ...
+## $ on_road              &lt;chr&gt; "SR 1915", "NICHOLAS ST", "US 321", "W BU...
+## $ rural_urban          &lt;chr&gt; "Rural", "Urban", "Rural", "Urban", "Urba...
+## $ speed_limit          &lt;chr&gt; "50 - 55  MPH", "30 - 35  MPH", "50 - 55 ...
+## $ traffic_control      &lt;chr&gt; "No Control Present", "Stop Sign", "Doubl...
+## $ weather              &lt;chr&gt; "Clear", "Clear", "Clear", "Rain", "Clear...
+## $ workzone             &lt;chr&gt; "No", "No", "No", "No", "No", "No", "No",...
+## $ bike_age             &lt;chr&gt; "52", "66", "33", "52", "22", "15", "41",...
+## $ bike_age_group       &lt;chr&gt; "50-59", "60-69", "30-39", "50-59", "20-2...
+## $ bike_alcohol         &lt;chr&gt; "No", "No", "No", "Yes", "No", "No", "No"...
+## $ bike_alcohol_drugs   &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N...
+## $ bike_direction       &lt;chr&gt; "With Traffic", "With Traffic", "With Tra...
+## $ bike_injury          &lt;chr&gt; "B: Evident Injury", "C: Possible Injury"...
+## $ bike_position        &lt;chr&gt; "Bike Lane / Paved Shoulder", "Travel Lan...
+## $ bike_race            &lt;chr&gt; "Black", "Black", "White", "Black", "Whit...
+## $ bike_sex             &lt;chr&gt; "Male", "Male", "Male", "Male", "Female",...
+## $ driver_age           &lt;chr&gt; "34", NA, "37", "55", "25", "17", NA, "50...
+## $ driver_age_group     &lt;chr&gt; "30-39", NA, "30-39", "50-59", "25-29", "...
+## $ driver_alcohol       &lt;chr&gt; "No", "Missing", "No", "No", "No", "No", ...
+## $ driver_alcohol_drugs &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N...
+## $ driver_est_speed     &lt;chr&gt; "51-55 mph", "6-10 mph", "41-45 mph", "11...
+## $ driver_injury        &lt;chr&gt; "O: No Injury", "Unknown Injury", "O: No ...
+## $ driver_race          &lt;chr&gt; "White", "Unknown/Missing", "Hispanic", "...
+## $ driver_sex           &lt;chr&gt; "Male", NA, "Female", "Male", "Male", "Fe...
+## $ driver_vehicle_type  &lt;chr&gt; "Single Unit Truck (2-Axle, 6-Tire)", NA,...
+## $ crash_alcohol        &lt;chr&gt; "No", "No", "No", "Yes", "No", "No", "No"...
+## $ crash_date           &lt;chr&gt; "11DEC2013", "20NOV2013", "03NOV2013", "1...
+## $ crash_day            &lt;chr&gt; "Wednesday", "Wednesday", "Sunday", "Satu...
+## $ crash_group          &lt;chr&gt; "Motorist Overtaking Bicyclist", "Bicycli...
+## $ crash_hour           &lt;int&gt; 6, 20, 18, 18, 13, 17, 17, 7, 15, 2, 12, ...
+## $ crash_location       &lt;chr&gt; "Non-Intersection", "Intersection", "Non-...
+## $ crash_month          &lt;chr&gt; "December", "November", "November", "Dece...
+## $ crash_severity       &lt;chr&gt; "B: Evident Injury", "C: Possible Injury"...
+## $ crash_time           &lt;time&gt; 06:10:00, 20:41:00, 18:05:00, 18:34:00, ...
+## $ crash_type           &lt;chr&gt; "Motorist Overtaking - Undetected Bicycli...
+## $ crash_year           &lt;int&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013,...
+## $ ambulance_req        &lt;chr&gt; "Yes", "No", "Yes", "Yes", "Yes", "Yes", ...
+## $ hit_run              &lt;chr&gt; "No", "Yes", "No", "No", "No", "No", "Yes...
+## $ light_condition      &lt;chr&gt; "Dark - Roadway Not Lighted", NA, "Dark -...
+## $ road_character       &lt;chr&gt; "Straight - Level", "Straight - Level", "...
+## $ road_class           &lt;chr&gt; "State Secondary Route", "Local Street", ...
+## $ road_condition       &lt;chr&gt; "Dry", "Dry", "Dry", "Water (Standing, Mo...
+## $ road_configuration   &lt;chr&gt; "Two-Way, Not Divided", "Two-Way, Divided...
+## $ road_defects         &lt;chr&gt; "None", NA, "None", "None", "None", "None...
+## $ road_feature         &lt;chr&gt; "No Special Feature", "T-Intersection", "...
+## $ road_surface         &lt;chr&gt; "Coarse Asphalt", "Smooth Asphalt", "Smoo...
+## $ num_bikes_ai         &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+## $ num_bikes_bi         &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+## $ num_bikes_ci         &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+## $ num_bikes_ki         &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+## $ num_bikes_no         &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+## $ num_bikes_to         &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+## $ num_bikes_ui         &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+## $ num_lanes            &lt;chr&gt; "2 lanes", "2 lanes", "2 lanes", "1 lane"...
+## $ num_units            &lt;int&gt; 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,...
+## $ distance_mi_from     &lt;chr&gt; "0", "0", "0", "0", "0", "0", "0", "0", "...
+## $ frm_road             &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N...
+## $ rte_invd_cd          &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
+## $ towrd_road           &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, N...
+## $ geo_point            &lt;chr&gt; "35.3336070056, -77.9955023901", "36.3151...
+## $ geo_shape            &lt;chr&gt; "{\"type\": \"Point\", \"coordinates\": [...
+```
+
+---
+
+## A Grammar of Data Manipulation
+
+**dplyr** is based on the concepts of functions as verbs that manipulate data frames.
+
+* `filter`: pick rows matching criteria
+* `slice`: pick rows using index(es)
+* `select`: pick columns by name
+* `pull`: grab a column as a vector
+* `arrange`: reorder rows
+* `mutate`: add new variables
+* `distinct`: filter for unique rows
+* `sample_n` / `sample_frac`: randomly sample rows
+* `summarise`: reduce variables to values
+* ... (many more)
+
+---
+
+## **dplyr** rules for functions
+
+- First argument is *always* a data frame
+- Subsequent arguments say what to do with that data frame
+- Always return a data frame
+- Don't modify in place
+
+---
+
+## A note on piping and layering
+
+- The `%&gt;%` operator in **dplyr** functions is called the pipe operator. This means you "pipe" the output of the previous line of code as the first input of the next line of code.
+- The `+` operator in **ggplot2** functions is used for "layering". This means you create the plot in layers, separated by `+`.
+
+---
+
+## `filter` to select a subset of rows
+
+for crashes in Durham County
+
+
+```r
+ncbikecrash %&gt;%
+  filter(county == "Durham")
+```
+
+```
+## # A tibble: 340 x 66
+##    object_id city  county region development locality on_road rural_urban
+##        &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;      
+##  1      2452 Durh… Durham Piedm… Residential Urban (… &lt;NA&gt;    Urban      
+##  2      2441 Durh… Durham Piedm… Commercial  Urban (… &lt;NA&gt;    Urban      
+##  3      2466 Durh… Durham Piedm… Commercial  Urban (… &lt;NA&gt;    Urban      
+##  4       549 Durh… Durham Piedm… Residential Urban (… PARK A… Urban      
+##  5       598 Durh… Durham Piedm… Residential Urban (… BELT S… Urban      
+##  6       603 Durh… Durham Piedm… Residential Urban (… HINSON… Urban      
+##  7      3974 Durh… Durham Piedm… Commercial  Urban (… &lt;NA&gt;    Urban      
+##  8      7134 Durh… Durham Piedm… Commercial  Urban (… &lt;NA&gt;    Urban      
+##  9      1670 Durh… Durham Piedm… Commercial  Urban (… INFINI… Urban      
+## 10      1773 Durh… Durham Piedm… Residential Urban (… &lt;NA&gt;    Urban      
+## # ... with 330 more rows, and 58 more variables: speed_limit &lt;chr&gt;,
+## #   traffic_control &lt;chr&gt;, weather &lt;chr&gt;, workzone &lt;chr&gt;, bike_age &lt;chr&gt;,
+## #   bike_age_group &lt;chr&gt;, bike_alcohol &lt;chr&gt;, bike_alcohol_drugs &lt;chr&gt;,
+## #   bike_direction &lt;chr&gt;, bike_injury &lt;chr&gt;, bike_position &lt;chr&gt;,
+## #   bike_race &lt;chr&gt;, bike_sex &lt;chr&gt;, driver_age &lt;chr&gt;,
+## #   driver_age_group &lt;chr&gt;, driver_alcohol &lt;chr&gt;,
+## #   driver_alcohol_drugs &lt;chr&gt;, driver_est_speed &lt;chr&gt;,
+## #   driver_injury &lt;chr&gt;, driver_race &lt;chr&gt;, driver_sex &lt;chr&gt;,
+## #   driver_vehicle_type &lt;chr&gt;, crash_alcohol &lt;chr&gt;, crash_date &lt;chr&gt;,
+## #   crash_day &lt;chr&gt;, crash_group &lt;chr&gt;, crash_hour &lt;int&gt;,
+## #   crash_location &lt;chr&gt;, crash_month &lt;chr&gt;, crash_severity &lt;chr&gt;,
+## #   crash_time &lt;time&gt;, crash_type &lt;chr&gt;, crash_year &lt;int&gt;,
+## #   ambulance_req &lt;chr&gt;, hit_run &lt;chr&gt;, light_condition &lt;chr&gt;,
+## #   road_character &lt;chr&gt;, road_class &lt;chr&gt;, road_condition &lt;chr&gt;,
+## #   road_configuration &lt;chr&gt;, road_defects &lt;chr&gt;, road_feature &lt;chr&gt;,
+## #   road_surface &lt;chr&gt;, num_bikes_ai &lt;int&gt;, num_bikes_bi &lt;int&gt;,
+## #   num_bikes_ci &lt;int&gt;, num_bikes_ki &lt;int&gt;, num_bikes_no &lt;int&gt;,
+## #   num_bikes_to &lt;int&gt;, num_bikes_ui &lt;int&gt;, num_lanes &lt;chr&gt;,
+## #   num_units &lt;int&gt;, distance_mi_from &lt;chr&gt;, frm_road &lt;chr&gt;,
+## #   rte_invd_cd &lt;int&gt;, towrd_road &lt;chr&gt;, geo_point &lt;chr&gt;, geo_shape &lt;chr&gt;
+```
+
+---
+
+## `filter` for many conditions at once
+
+for crashes in Durham County where biker was 0-5 years old
+
+
+```r
+ncbikecrash %&gt;%
+  filter(county == "Durham", bike_age_group == "0-5")
+```
+
+```
+## # A tibble: 4 x 66
+##   object_id city  county region development locality on_road rural_urban
+##       &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;      
+## 1      4062 Durh… Durham Piedm… Residential Urban (… &lt;NA&gt;    Urban      
+## 2       414 Durh… Durham Piedm… Residential Urban (… PVA 90… Urban      
+## 3      3016 Durh… Durham Piedm… Residential Urban (… &lt;NA&gt;    Urban      
+## 4      1383 Durh… Durham Piedm… Residential Urban (… PVA 62… Urban      
+## # ... with 58 more variables: speed_limit &lt;chr&gt;, traffic_control &lt;chr&gt;,
+## #   weather &lt;chr&gt;, workzone &lt;chr&gt;, bike_age &lt;chr&gt;, bike_age_group &lt;chr&gt;,
+## #   bike_alcohol &lt;chr&gt;, bike_alcohol_drugs &lt;chr&gt;, bike_direction &lt;chr&gt;,
+## #   bike_injury &lt;chr&gt;, bike_position &lt;chr&gt;, bike_race &lt;chr&gt;,
+## #   bike_sex &lt;chr&gt;, driver_age &lt;chr&gt;, driver_age_group &lt;chr&gt;,
+## #   driver_alcohol &lt;chr&gt;, driver_alcohol_drugs &lt;chr&gt;,
+## #   driver_est_speed &lt;chr&gt;, driver_injury &lt;chr&gt;, driver_race &lt;chr&gt;,
+## #   driver_sex &lt;chr&gt;, driver_vehicle_type &lt;chr&gt;, crash_alcohol &lt;chr&gt;,
+## #   crash_date &lt;chr&gt;, crash_day &lt;chr&gt;, crash_group &lt;chr&gt;,
+## #   crash_hour &lt;int&gt;, crash_location &lt;chr&gt;, crash_month &lt;chr&gt;,
+## #   crash_severity &lt;chr&gt;, crash_time &lt;time&gt;, crash_type &lt;chr&gt;,
+## #   crash_year &lt;int&gt;, ambulance_req &lt;chr&gt;, hit_run &lt;chr&gt;,
+## #   light_condition &lt;chr&gt;, road_character &lt;chr&gt;, road_class &lt;chr&gt;,
+## #   road_condition &lt;chr&gt;, road_configuration &lt;chr&gt;, road_defects &lt;chr&gt;,
+## #   road_feature &lt;chr&gt;, road_surface &lt;chr&gt;, num_bikes_ai &lt;int&gt;,
+## #   num_bikes_bi &lt;int&gt;, num_bikes_ci &lt;int&gt;, num_bikes_ki &lt;int&gt;,
+## #   num_bikes_no &lt;int&gt;, num_bikes_to &lt;int&gt;, num_bikes_ui &lt;int&gt;,
+## #   num_lanes &lt;chr&gt;, num_units &lt;int&gt;, distance_mi_from &lt;chr&gt;,
+## #   frm_road &lt;chr&gt;, rte_invd_cd &lt;int&gt;, towrd_road &lt;chr&gt;, geo_point &lt;chr&gt;,
+## #   geo_shape &lt;chr&gt;
+```
+
+---
+
+## Logical operators in R
+
+operator    | definition                   || operator     | definition
+------------|------------------------------||--------------|----------------
+`&lt;`         | less than                    ||`x`&amp;nbsp;&amp;#124;&amp;nbsp;`y`     | `x` OR `y` 
+`&lt;=`        |	less than or equal to        ||`is.na(x)`    | test if `x` is `NA`
+`&gt;`         | greater than                 ||`!is.na(x)`   | test if `x` is not `NA`
+`&gt;=`        |	greater than or equal to     ||`x %in% y`    | test if `x` is in `y`
+`==`        |	exactly equal to             ||`!(x %in% y)` | test if `x` is not in `y`
+`!=`        |	not equal to                 ||`!x`          | not `x`
+`x &amp; y`     | `x` AND `y`                  ||              |
+
+---
+
+## `select` to keep variables
+
+
+```r
+ncbikecrash %&gt;%
+  filter(county == "Durham", bike_age_group == "0-5") %&gt;%
+  select(locality, speed_limit)
+```
+
+```
+## # A tibble: 4 x 2
+##   locality               speed_limit 
+##   &lt;chr&gt;                  &lt;chr&gt;       
+## 1 Urban (&gt;70% Developed) 30 - 35  MPH
+## 2 Urban (&gt;70% Developed) 5 - 15 MPH  
+## 3 Urban (&gt;70% Developed) 20 - 25  MPH
+## 4 Urban (&gt;70% Developed) 20 - 25  MPH
+```
+
+---
+
+## `select` to exclude variables
+
+
+```r
+ncbikecrash %&gt;%
+  select(-object_id)
+```
+
+```
+## # A tibble: 7,467 x 65
+##    city  county region development locality on_road rural_urban speed_limit
+##    &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt;      
+##  1 None… Wayne  Coast… Farms, Woo… Rural (… SR 1915 Rural       50 - 55  M…
+##  2 Hend… Vance  Piedm… Residential Mixed (… NICHOL… Urban       30 - 35  M…
+##  3 None… Linco… Piedm… Farms, Woo… Rural (… US 321  Rural       50 - 55  M…
+##  4 Whit… Colum… Coast… Commercial  Urban (… W BURK… Urban       30 - 35  M…
+##  5 Wilm… New H… Coast… Residential Urban (… RACINE… Urban       &lt;NA&gt;       
+##  6 None… Robes… Coast… Farms, Woo… Rural (… SR 1513 Rural       50 - 55  M…
+##  7 None… Richm… Piedm… Residential Mixed (… SR 1903 Rural       30 - 35  M…
+##  8 Rale… Wake   Piedm… Commercial  Urban (… PERSON… Urban       30 - 35  M…
+##  9 Whit… Colum… Coast… Residential Rural (… FLOWER… Urban       30 - 35  M…
+## 10 New … Craven Coast… Residential Urban (… SUTTON… Urban       20 - 25  M…
+## # ... with 7,457 more rows, and 57 more variables: traffic_control &lt;chr&gt;,
+## #   weather &lt;chr&gt;, workzone &lt;chr&gt;, bike_age &lt;chr&gt;, bike_age_group &lt;chr&gt;,
+## #   bike_alcohol &lt;chr&gt;, bike_alcohol_drugs &lt;chr&gt;, bike_direction &lt;chr&gt;,
+## #   bike_injury &lt;chr&gt;, bike_position &lt;chr&gt;, bike_race &lt;chr&gt;,
+## #   bike_sex &lt;chr&gt;, driver_age &lt;chr&gt;, driver_age_group &lt;chr&gt;,
+## #   driver_alcohol &lt;chr&gt;, driver_alcohol_drugs &lt;chr&gt;,
+## #   driver_est_speed &lt;chr&gt;, driver_injury &lt;chr&gt;, driver_race &lt;chr&gt;,
+## #   driver_sex &lt;chr&gt;, driver_vehicle_type &lt;chr&gt;, crash_alcohol &lt;chr&gt;,
+## #   crash_date &lt;chr&gt;, crash_day &lt;chr&gt;, crash_group &lt;chr&gt;,
+## #   crash_hour &lt;int&gt;, crash_location &lt;chr&gt;, crash_month &lt;chr&gt;,
+## #   crash_severity &lt;chr&gt;, crash_time &lt;time&gt;, crash_type &lt;chr&gt;,
+## #   crash_year &lt;int&gt;, ambulance_req &lt;chr&gt;, hit_run &lt;chr&gt;,
+## #   light_condition &lt;chr&gt;, road_character &lt;chr&gt;, road_class &lt;chr&gt;,
+## #   road_condition &lt;chr&gt;, road_configuration &lt;chr&gt;, road_defects &lt;chr&gt;,
+## #   road_feature &lt;chr&gt;, road_surface &lt;chr&gt;, num_bikes_ai &lt;int&gt;,
+## #   num_bikes_bi &lt;int&gt;, num_bikes_ci &lt;int&gt;, num_bikes_ki &lt;int&gt;,
+## #   num_bikes_no &lt;int&gt;, num_bikes_to &lt;int&gt;, num_bikes_ui &lt;int&gt;,
+## #   num_lanes &lt;chr&gt;, num_units &lt;int&gt;, distance_mi_from &lt;chr&gt;,
+## #   frm_road &lt;chr&gt;, rte_invd_cd &lt;int&gt;, towrd_road &lt;chr&gt;, geo_point &lt;chr&gt;,
+## #   geo_shape &lt;chr&gt;
+```
+
+---
+
+## `select` a range of variables
+
+
+```r
+ncbikecrash %&gt;%
+  select(city:locality)
+```
+
+```
+## # A tibble: 7,467 x 5
+##    city          county     region  development       locality            
+##    &lt;chr&gt;         &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;             &lt;chr&gt;               
+##  1 None - Rural… Wayne      Coastal Farms, Woods, Pa… Rural (&lt;30% Develop…
+##  2 Henderson     Vance      Piedmo… Residential       Mixed (30% To 70% D…
+##  3 None - Rural… Lincoln    Piedmo… Farms, Woods, Pa… Rural (&lt;30% Develop…
+##  4 Whiteville    Columbus   Coastal Commercial        Urban (&gt;70% Develop…
+##  5 Wilmington    New Hanov… Coastal Residential       Urban (&gt;70% Develop…
+##  6 None - Rural… Robeson    Coastal Farms, Woods, Pa… Rural (&lt;30% Develop…
+##  7 None - Rural… Richmond   Piedmo… Residential       Mixed (30% To 70% D…
+##  8 Raleigh       Wake       Piedmo… Commercial        Urban (&gt;70% Develop…
+##  9 Whiteville    Columbus   Coastal Residential       Rural (&lt;30% Develop…
+## 10 New Bern      Craven     Coastal Residential       Urban (&gt;70% Develop…
+## # ... with 7,457 more rows
+```
+
+---
+
+## `slice` for certain row numbers
+
+First five
+
+```r
+ncbikecrash %&gt;%
+  slice(1:5)
+```
+
+```
+## # A tibble: 5 x 66
+##   object_id city  county region development locality on_road rural_urban
+##       &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;      
+## 1      1686 None… Wayne  Coast… Farms, Woo… Rural (… SR 1915 Rural      
+## 2      1674 Hend… Vance  Piedm… Residential Mixed (… NICHOL… Urban      
+## 3      1673 None… Linco… Piedm… Farms, Woo… Rural (… US 321  Rural      
+## 4      1687 Whit… Colum… Coast… Commercial  Urban (… W BURK… Urban      
+## 5      1653 Wilm… New H… Coast… Residential Urban (… RACINE… Urban      
+## # ... with 58 more variables: speed_limit &lt;chr&gt;, traffic_control &lt;chr&gt;,
+## #   weather &lt;chr&gt;, workzone &lt;chr&gt;, bike_age &lt;chr&gt;, bike_age_group &lt;chr&gt;,
+## #   bike_alcohol &lt;chr&gt;, bike_alcohol_drugs &lt;chr&gt;, bike_direction &lt;chr&gt;,
+## #   bike_injury &lt;chr&gt;, bike_position &lt;chr&gt;, bike_race &lt;chr&gt;,
+## #   bike_sex &lt;chr&gt;, driver_age &lt;chr&gt;, driver_age_group &lt;chr&gt;,
+## #   driver_alcohol &lt;chr&gt;, driver_alcohol_drugs &lt;chr&gt;,
+## #   driver_est_speed &lt;chr&gt;, driver_injury &lt;chr&gt;, driver_race &lt;chr&gt;,
+## #   driver_sex &lt;chr&gt;, driver_vehicle_type &lt;chr&gt;, crash_alcohol &lt;chr&gt;,
+## #   crash_date &lt;chr&gt;, crash_day &lt;chr&gt;, crash_group &lt;chr&gt;,
+## #   crash_hour &lt;int&gt;, crash_location &lt;chr&gt;, crash_month &lt;chr&gt;,
+## #   crash_severity &lt;chr&gt;, crash_time &lt;time&gt;, crash_type &lt;chr&gt;,
+## #   crash_year &lt;int&gt;, ambulance_req &lt;chr&gt;, hit_run &lt;chr&gt;,
+## #   light_condition &lt;chr&gt;, road_character &lt;chr&gt;, road_class &lt;chr&gt;,
+## #   road_condition &lt;chr&gt;, road_configuration &lt;chr&gt;, road_defects &lt;chr&gt;,
+## #   road_feature &lt;chr&gt;, road_surface &lt;chr&gt;, num_bikes_ai &lt;int&gt;,
+## #   num_bikes_bi &lt;int&gt;, num_bikes_ci &lt;int&gt;, num_bikes_ki &lt;int&gt;,
+## #   num_bikes_no &lt;int&gt;, num_bikes_to &lt;int&gt;, num_bikes_ui &lt;int&gt;,
+## #   num_lanes &lt;chr&gt;, num_units &lt;int&gt;, distance_mi_from &lt;chr&gt;,
+## #   frm_road &lt;chr&gt;, rte_invd_cd &lt;int&gt;, towrd_road &lt;chr&gt;, geo_point &lt;chr&gt;,
+## #   geo_shape &lt;chr&gt;
+```
+
+---
+
+## `slice` for certain row numbers
+
+Last five
+
+```r
+last_row &lt;- nrow(ncbikecrash)
+ncbikecrash %&gt;%
+  slice((last_row - 4):last_row)
+```
+
+```
+## # A tibble: 5 x 66
+##   object_id city  county region development locality on_road rural_urban
+##       &lt;int&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;      
+## 1      6989 High… Guilf… Piedm… Residential Urban (… &lt;NA&gt;    Urban      
+## 2      6991 Wilm… New H… Coast… Residential Urban (… &lt;NA&gt;    Urban      
+## 3      6995 Kins… Lenoir Coast… Commercial  Urban (… &lt;NA&gt;    Urban      
+## 4      6998 Faye… Cumbe… Coast… Residential Urban (… &lt;NA&gt;    Urban      
+## 5      7000 None… Onslow Coast… Farms, Woo… Rural (… &lt;NA&gt;    Rural      
+## # ... with 58 more variables: speed_limit &lt;chr&gt;, traffic_control &lt;chr&gt;,
+## #   weather &lt;chr&gt;, workzone &lt;chr&gt;, bike_age &lt;chr&gt;, bike_age_group &lt;chr&gt;,
+## #   bike_alcohol &lt;chr&gt;, bike_alcohol_drugs &lt;chr&gt;, bike_direction &lt;chr&gt;,
+## #   bike_injury &lt;chr&gt;, bike_position &lt;chr&gt;, bike_race &lt;chr&gt;,
+## #   bike_sex &lt;chr&gt;, driver_age &lt;chr&gt;, driver_age_group &lt;chr&gt;,
+## #   driver_alcohol &lt;chr&gt;, driver_alcohol_drugs &lt;chr&gt;,
+## #   driver_est_speed &lt;chr&gt;, driver_injury &lt;chr&gt;, driver_race &lt;chr&gt;,
+## #   driver_sex &lt;chr&gt;, driver_vehicle_type &lt;chr&gt;, crash_alcohol &lt;chr&gt;,
+## #   crash_date &lt;chr&gt;, crash_day &lt;chr&gt;, crash_group &lt;chr&gt;,
+## #   crash_hour &lt;int&gt;, crash_location &lt;chr&gt;, crash_month &lt;chr&gt;,
+## #   crash_severity &lt;chr&gt;, crash_time &lt;time&gt;, crash_type &lt;chr&gt;,
+## #   crash_year &lt;int&gt;, ambulance_req &lt;chr&gt;, hit_run &lt;chr&gt;,
+## #   light_condition &lt;chr&gt;, road_character &lt;chr&gt;, road_class &lt;chr&gt;,
+## #   road_condition &lt;chr&gt;, road_configuration &lt;chr&gt;, road_defects &lt;chr&gt;,
+## #   road_feature &lt;chr&gt;, road_surface &lt;chr&gt;, num_bikes_ai &lt;int&gt;,
+## #   num_bikes_bi &lt;int&gt;, num_bikes_ci &lt;int&gt;, num_bikes_ki &lt;int&gt;,
+## #   num_bikes_no &lt;int&gt;, num_bikes_to &lt;int&gt;, num_bikes_ui &lt;int&gt;,
+## #   num_lanes &lt;chr&gt;, num_units &lt;int&gt;, distance_mi_from &lt;chr&gt;,
+## #   frm_road &lt;chr&gt;, rte_invd_cd &lt;int&gt;, towrd_road &lt;chr&gt;, geo_point &lt;chr&gt;,
+## #   geo_shape &lt;chr&gt;
+```
+
+---
+
+## `pull` to extract a column as a vector
+
+
+```r
+ncbikecrash %&gt;%
+  slice(1:6) %&gt;%
+  pull(locality)
+```
+
+```
+## [1] "Rural (&lt;30% Developed)"       "Mixed (30% To 70% Developed)"
+## [3] "Rural (&lt;30% Developed)"       "Urban (&gt;70% Developed)"      
+## [5] "Urban (&gt;70% Developed)"       "Rural (&lt;30% Developed)"
+```
+
+vs.
+
+
+```r
+ncbikecrash %&gt;%
+  slice(1:6) %&gt;%
+  select(locality)
+```
+
+```
+## # A tibble: 6 x 1
+##   locality                    
+##   &lt;chr&gt;                       
+## 1 Rural (&lt;30% Developed)      
+## 2 Mixed (30% To 70% Developed)
+## 3 Rural (&lt;30% Developed)      
+## 4 Urban (&gt;70% Developed)      
+## 5 Urban (&gt;70% Developed)      
+## 6 Rural (&lt;30% Developed)
+```
+
+---
+
+## `sample_n` / `sample_frac` for a random sample
+
+- `sample_n`: randomly sample 5 observations
+
+
+```r
+ncbikecrash_n5 &lt;- ncbikecrash %&gt;%
+  sample_n(5, replace = FALSE)
+dim(ncbikecrash)
+```
+
+```
+## [1] 7467   66
+```
+
+- `sample_frac`: randomly sample 20% of observations
+
+
+```r
+ncbikecrash_perc20 &lt;-ncbikecrash %&gt;%
+  sample_frac(0.2, replace = FALSE)
+dim(ncbikecrash_perc20)
+```
+
+```
+## [1] 1493   66
+```
+
+---
+
+## `distinct` to filter for unique rows
+
+And `arrange` to order alphabetically
+
+
+```r
+ncbikecrash %&gt;% 
+  select(county, city) %&gt;% 
+  distinct() %&gt;% 
+  arrange(county, city)
+```
+
+```
+## # A tibble: 391 x 2
+##    county    city              
+##    &lt;chr&gt;     &lt;chr&gt;             
+##  1 Alamance  Alamance          
+##  2 Alamance  Burlington        
+##  3 Alamance  Elon              
+##  4 Alamance  Elon College      
+##  5 Alamance  Gibsonville       
+##  6 Alamance  Graham            
+##  7 Alamance  Green Level       
+##  8 Alamance  Mebane            
+##  9 Alamance  None - Rural Crash
+## 10 Alexander None - Rural Crash
+## # ... with 381 more rows
+```
+
+---
+
+## `summarise` to reduce variables to values
+
+
+```r
+ncbikecrash %&gt;%
+  summarise(avg_hr = mean(crash_hour))
+```
+
+```
+## # A tibble: 1 x 1
+##   avg_hr
+##    &lt;dbl&gt;
+## 1   14.7
+```
+
+---
+
+## `group_by` to do calculations on groups
+
+
+```r
+ncbikecrash %&gt;%
+  group_by(hit_run) %&gt;%
+  summarise(avg_hr = mean(crash_hour))
+```
+
+```
+## # A tibble: 2 x 2
+##   hit_run avg_hr
+##   &lt;chr&gt;    &lt;dbl&gt;
+## 1 No        14.6
+## 2 Yes       15.0
+```
+
+---
+
+## `count` observations in groups
+
+
+```r
+ncbikecrash %&gt;%
+  count(driver_alcohol_drugs)
+```
+
+```
+## # A tibble: 6 x 2
+##   driver_alcohol_drugs                    n
+##   &lt;chr&gt;                               &lt;int&gt;
+## 1 Missing                                99
+## 2 No                                    695
+## 3 Yes-Alcohol,  impairment suspected     12
+## 4 Yes-Alcohol, no impairment detected     3
+## 5 Yes-Drugs, impairment suspected         4
+## 6 &lt;NA&gt;                                 6654
+```
+
+---
+
+## `mutate` to add new variables
+
+
+```r
+ncbikecrash %&gt;%
+  mutate(driver_alcohol_drugs_simplified = case_when(
+    driver_alcohol_drugs == "Missing"       ~ NA,
+    str_detect(driver_alcohol_drugs, "Yes") ~ "Yes",
+    TRUE                                    ~ "No"
+  ))
+```
+
+---
+
+## "Save" when you `mutate`
+
+Most often when you define a new variable with `mutate` you'll also want to save the resulting data frame, often by writing over the original data frame.
+
+
+```r
+ncbikecrash &lt;- ncbikecrash %&gt;%
+  mutate(driver_alcohol_drugs_simplified = case_when(
+    str_detect(driver_alcohol_drugs, "Yes") ~ "Yes",
+    TRUE                                    ~ driver_alcohol_drugs
+  ))
+```
+
+---
+
+## Check before you move on
+
+
+```r
+ncbikecrash %&gt;% 
+  count(driver_alcohol_drugs, driver_alcohol_drugs_simplified)
+```
+
+```
+## # A tibble: 6 x 3
+##   driver_alcohol_drugs                driver_alcohol_drugs_simplified     n
+##   &lt;chr&gt;                               &lt;chr&gt;                           &lt;int&gt;
+## 1 Missing                             Missing                            99
+## 2 No                                  No                                695
+## 3 Yes-Alcohol,  impairment suspected  Yes                                12
+## 4 Yes-Alcohol, no impairment detected Yes                                 3
+## 5 Yes-Drugs, impairment suspected     Yes                                 4
+## 6 &lt;NA&gt;                                &lt;NA&gt;                             6654
+```
+
+---
+
+class: center, middle
+
+# Application exercise
+
+---
+
+## `ae-04-ncbikecrash`
+
+- `pt-01`: Locate the project on RStudio Cloud, make a copy, complete the exercises
+- `pt-02`: Locate the repository on GitHub, and then...
+
+---
+
+class: center, middle
+
+# Git and GitHub
+
+---
+
+## Version control
+
+- We introduced GitHub as a platform for collaboration
+- But it's much more than that...
+- It's actually desiged for version control
+
+---
+
+## Versioning
+
+![Lego versions](img/lego-steps.png)
+
+---
+
+## Versioning
+
+with human readable messages
+
+![Lego versions with commit messages](img/lego-steps-commit-messages.png)
+
+---
+
+## Why do we need version control?
+
+![PhD Comics](img/phd_comics_vc.gif)
+
+---
+
+# Git and GitHub tips
+
+- Git is a version control system -- like “Track Changes” features from Microsoft Word on steroids. GitHub is the home for your Git-based projects on the internet -- like DropBox but much, much better).
+
+--
+- There are millions of git commands -- ok, that's an exaggeration, but there are a lot of them -- and very few people know them all. 99% of the time you will use git to add, commit, push, and pull.
+
+--
+- We will be doing Git things and interfacing with GitHub through RStudio, but if you google for help you might come accross methods for doing these things in the command line -- skip that and move on to the next resource unless you feel comfortable trying it out.
+
+--
+- There is a great resource for working with git and R: [happygitwithr.com](http://happygitwithr.com/). Some of the content in there is beyond the scope of this course, but it's a good place to look for help.
+
+---
+
+## Let's take a tour -- Git / GitHub
+
+Concepts introduced:
+
+- Connect an R project to Github repository
+- Working with a local and remote repository
+- Committing, Pushing and Pulling
+
+There is just a bit more of GitHub that we'll use in this class, but for today this is enough.
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "darkbone",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
