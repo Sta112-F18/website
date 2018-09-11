@@ -201,4 +201,9 @@ div.my-footer a {
   font-size: 12pt;
 }
 
+.title-slide .remark-slide-number {
+  display: none;
+}
+
+
 
