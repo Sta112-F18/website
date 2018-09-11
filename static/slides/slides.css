@@ -171,3 +171,34 @@ thead, tfoot, tr:nth-child(even) { background: #eee }
     height: 685px;
     width: 700px;
 }
+
+div.my-footer {
+    background-color: #ffffff;
+    border-top: 1px solid #A7D5E8;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    height: 40px;
+    width: 100%;
+}
+div.my-footer span {
+    font-size: 12pt;
+    position: absolute;
+    color: #333333;
+    left: 20px;
+    bottom: 10px;
+}
+div.my-footer a {
+    font-size: 12pt;
+    color: #333333;
+}
+.remark-code-line-highlighted {
+  background-color: #A7D5E8;
+}
+.remark-slide-number {
+  color: #333333;
+  opacity: 1;
+  font-size: 12pt;
+}
+
+
