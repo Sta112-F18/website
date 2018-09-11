@@ -176,12 +176,8 @@ class: center, middle
 
 The dataset is in the **dsbox** package:
 
-```{r install-dsbox, eval=FALSE}
+```{r load-data, eval=FALSE}
 library(dsbox)
-```
-
-
-```{r load-data}
 ncbikecrash
 ```
 
