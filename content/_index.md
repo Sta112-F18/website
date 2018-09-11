@@ -10,7 +10,7 @@ markup: "mmark"
 <span></span>     | <span></span>     | <span></span>    | <span></span>    |  <span></span>      
 ------------------|-------------------|------------------|------------------|------------------ 
 **Class meetings**| Link Classroom 1  | Tu Th 10:05 - 11:20
-**Professor**     | [Mine Çetinkaya-Rundel](http://stat.duke.edu/~mc301/) | <a href="mailto:mine@stat.duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/mine-cetinkaya-rundel" title="GitHub"><i class="fa fa-github"></i></a> &nbsp; <a href="https://twitter.com/minebocek" title="Twitter"><i class="fa fa-twitter"></i></a> | OH: Wed 9:30 - 11:30 | Old Chem 213
+**Professor**     | [Mine Çetinkaya-Rundel](http://stat.duke.edu/~mc301/) | <a href="mailto:mine@stat.duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/mine-cetinkaya-rundel" title="GitHub"><i class="fa fa-github"></i></a> &nbsp; <a href="https://twitter.com/minebocek" title="Twitter"><i class="fa fa-twitter"></i></a> | OH: Wed 9:30 - 12:00 | Old Chem 213
 **TA**            | [Eidan Jacob](https://stat.duke.edu/people/eidan-jacob) | <a href="mailto:eidan.jacob@duke.edu" title="email"><i class="fa fa-envelope"></i></a> &nbsp; <a href="https://github.com/ej68" title="GitHub"><i class="fa fa-github"></i></a> | OH: Mon 3:30 - 4:30 + Fri 3:30 - 4:30 | Old Chem 025
 **Books**         | Books are freely available online            |
                   | [R for Data Science](http://r4ds.had.co.nz/) | Grolemund, Wickham | O'Reilly, 1st edition, 2016
