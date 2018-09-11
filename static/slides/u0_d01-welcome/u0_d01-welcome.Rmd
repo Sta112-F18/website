@@ -1,15 +1,27 @@
 ---
-title: "Welcome to Data Science <br> 🙌"
-author: ""
+title: "Welcome to Data Science <br> `r emo::ji('raised_hands')`"
+author: "Dr. Çetinkaya-Rundel"
 output:
   xaringan::moon_reader:
     css: "../slides.css"
-    logo: "../dsbox-logo.png"
+    logo: "../sta112-hex.png"
     lib_dir: libs
     nature:
-      highlightStyle: github
       highlightLines: true
+      highlightStyle: solarized-dark
       countIncrementalSlides: false
+---
+
+layout: true
+  
+<div class="my-footer">
+<span>
+Dr. Mine Çetinkaya-Rundel -
+<a href="http://www2.stat.duke.edu/courses/Fall18/sta112.01/schedule" target="_blank">stat.duke.edu/courses/Fall18/sta112.01
+</a>
+</span>
+</div> 
+
 ---
 
 ```{r packages, echo=FALSE, message=FALSE, warning=FALSE}

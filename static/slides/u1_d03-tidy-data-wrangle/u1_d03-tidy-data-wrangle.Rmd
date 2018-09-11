@@ -7,9 +7,21 @@ output:
     logo: "../sta112-hex.png"
     lib_dir: libs
     nature:
-      highlightStyle: darkbone
       highlightLines: true
+      highlightStyle: solarized-dark
       countIncrementalSlides: false
+---
+
+layout: true
+  
+<div class="my-footer">
+<span>
+Dr. Mine Çetinkaya-Rundel -
+<a href="http://www2.stat.duke.edu/courses/Fall18/sta112.01/schedule" target="_blank">stat.duke.edu/courses/Fall18/sta112.01
+</a>
+</span>
+</div> 
+
 ---
 
 ```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
@@ -202,16 +214,23 @@ glimpse(ncbikecrash)
 
 **dplyr** is based on the concepts of functions as verbs that manipulate data frames.
 
-* `filter`: pick rows matching criteria
-* `slice`: pick rows using index(es)
-* `select`: pick columns by name
-* `pull`: grab a column as a vector
-* `arrange`: reorder rows
-* `mutate`: add new variables
-* `distinct`: filter for unique rows
-* `sample_n` / `sample_frac`: randomly sample rows
-* `summarise`: reduce variables to values
-* ... (many more)
+.pull-left[
+![](img/dplyr-part-of-tidyverse.png)
+]
+.pull-right[
+.midi[
+- `filter`: pick rows matching criteria
+- `slice`: pick rows using index(es)
+- `select`: pick columns by name
+- `pull`: grab a column as a vector
+- `arrange`: reorder rows
+- `mutate`: add new variables
+- `distinct`: filter for unique rows
+- `sample_n` / `sample_frac`: randomly sample rows
+- `summarise`: reduce variables to values
+- ... (many more)
+]
+]
 
 ---
 
@@ -237,7 +256,7 @@ for crashes in Durham County
 
 ```{r}
 ncbikecrash %>%
-  filter(county == "Durham")
+  filter(county == "Durham") #<<
 ```
 
 ---
@@ -466,21 +485,27 @@ class: center, middle
 
 ## Versioning
 
-![Lego versions](img/lego-steps.png)
+```{r echo=FALSE, fig.align = "center", out.width = 1200}
+knitr::include_graphics("img/lego-steps.png")
+```
 
 ---
 
-## Versioning
+## Versioning 
 
 with human readable messages
 
-![Lego versions with commit messages](img/lego-steps-commit-messages.png)
+```{r echo=FALSE, fig.align = "center", out.width = 1200}
+knitr::include_graphics("img/lego-steps-commit-messages.png")
+```
 
 ---
 
 ## Why do we need version control?
 
-![PhD Comics](img/phd_comics_vc.gif)
+```{r echo=FALSE, fig.align = "center"}
+knitr::include_graphics("img/phd_comics_vc.gif")
+```
 
 ---
 
@@ -499,14 +524,11 @@ with human readable messages
 
 ---
 
-## Let's take a tour -- Git / GitHub
+## Application exercise: <br> `ae-04-ncbikecrash`
 
-`ae-04-ncbikecrash`
-
-Concepts introduced:
-
-- Connect an R project to Github repository
-- Working with a local and remote repository
-- Committing, Pushing and Pulling
-
-There is just a bit more of GitHub that we'll use in this class, but for today this is enough.
+- Practice with Git and GitHub
+- Concepts introduced:
+  - Connect an R project to Github repository
+  - Working with a local and remote repository
+  - Committing, Pushing and Pulling
+- There is just a bit more of GitHub that we'll use in this class, but for today this is enough
