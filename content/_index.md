@@ -18,7 +18,7 @@ markup: "mmark"
                   
 ### Important dates
 
-- Exam 01 - due Thur, Oct 4
+- Exam 01 - due Tue, Oct 2
 - Exam 02 - due Tue, Nov 13
 - Final project presentations - Fri, Dec 14
 
