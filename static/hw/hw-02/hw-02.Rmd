@@ -1,5 +1,6 @@
 ---
 title: "HW 02 - Spot the dinosauR"
+subtitle: "Individual assignment"
 date: "Due: Sep 4 at 10:05am"
 output: 
   tufte::tufte_html:

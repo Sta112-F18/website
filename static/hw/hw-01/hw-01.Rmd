@@ -1,5 +1,6 @@
 ---
 title: "HW 01 - Course logistics"
+subtitle: "Individual assignment"
 date: "Due: Aug 30 at 10:05am"
 output: 
   tufte::tufte_html:

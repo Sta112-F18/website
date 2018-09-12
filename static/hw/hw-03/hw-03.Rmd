@@ -1,5 +1,6 @@
 ---
 title: "HW 03 - NC Bike crashes"
+subtitle: "Individual assignment"
 date: "Due: Sep 11 at 10:05am"
 output: 
   tufte::tufte_html:
@@ -104,7 +105,7 @@ git config --global user.name
 
 ## Updating project name
 
-Currently your project is called *Untitled Project*. Update the name of your project to be "Lab 01 - Hello R".
+Currently your project is called *Untitled Project*. Update the name of your project to be "HW 03 - NC Bike Crash".
 
 ```{r untitled-project, fig.fullwidth=TRUE, echo = FALSE}
 knitr::include_graphics("img/untitled-project.png")
