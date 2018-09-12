@@ -123,7 +123,7 @@ li{
   margin: 10px 0;
 }
 .large { font-size: 130% }
-.midi { font-size: 90% }
+.midi { font-size: 85% }
 .small { font-size: 70% }
 img, video, iframe {
   max-width: 100%;
@@ -161,7 +161,7 @@ thead, tfoot, tr:nth-child(even) { background: #eee }
     width: 81px;
     background-repeat: no-repeat;
     background-size: contain;
-    background-image: url("dsbox-logo.png");
+    background-image: url("sta112-hex.png");
 }
 
 .element.style {
@@ -177,8 +177,8 @@ div.my-footer {
     border-top: 1px solid #A7D5E8;
     position: absolute;
     bottom: 0px;
-    left: 0px;
-    height: 40px;
+    left: 80px;
+    height: 35px;
     width: 100%;
 }
 div.my-footer span {
