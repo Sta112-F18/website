@@ -1,5 +1,6 @@
 ---
 title: "NC bike crashes"
+subtitle: "Application exercise 04"
 author: "Mine Cetinkaya-Rundel"
 date: "2018-09-06"
 output: 

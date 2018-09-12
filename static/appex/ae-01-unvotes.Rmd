@@ -1,5 +1,6 @@
 ---
-title: "UN Votes"
+title: "UN votes"
+subtitle: "Application exercise 01"
 output: 
   html_document: 
     css: hw.css

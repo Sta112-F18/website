@@ -1,5 +1,6 @@
 ---
-title: "Bechdel"
+title: "Bechdel test"
+subtitle: "Application exercise 02"
 author: "Mine Cetinkaya-Rundel"
 date: "2018-08-30"
 output: 

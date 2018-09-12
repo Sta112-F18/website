@@ -1,5 +1,6 @@
 ---
-title: "Visualizing Starwars Characters"
+title: "Visualizing Starwars characters"
+subtitle: "Application exercise 03"
 author: "Mine Cetinkaya-Rundel"
 date: "9/4/2018"
 output: 
