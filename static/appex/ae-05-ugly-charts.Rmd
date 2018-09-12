@@ -1,0 +1,40 @@
+---
+title: "Ugly charts"
+subtitle: "Application exercise 05"
+author: "Mine Cetinkaya-Rundel"
+date: "2018-09-11"
+output: 
+  html_document: 
+    fig_height: 4
+    fig_width: 10
+---
+
+### Improve the data visualization assigned to you in class. Remove the images for the ones not assigned to you.
+
+- team-gg - Fisheries
+- no-name - Staff employment trends
+- the-models - Nutrition
+- geom_points - Staff employment trends
+
+
+1. Fishing industry by country
+
+```{r echo=FALSE}
+knitr::include_graphics("img/fisheries.png")
+```
+
+2. InstructionalStaffEmployTrends
+
+```{r echo=FALSE}
+knitr::include_graphics("img/nutrition.png")
+```
+
+3. NERRS Nutrient Data
+
+```{r echo=FALSE}
+knitr::include_graphics("img/staff-employment.png")
+```
+
+
+### Create a 5 min presentation about how you improved the presentation. Your presentation can be created using any software.
+
