@@ -1,0 +1,222 @@
+---
+title: "HW 04 - Gotta catch 'em all"
+subtitle: "Individual assignment"
+date: "Due: Sep 18 at 10:05am"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: ../hw.css
+---
+
+<div style= "float:right;position: relative; margin-left: 20px">
+```{r setup, echo=FALSE, fig.align="right", out.width=500}
+knitr::include_graphics("img/pokemon-go.jpg")
+```
+</div>
+
+```{r include=FALSE}
+library(tidyverse)
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE     # for regression output
+  )
+```
+
+
+
+```{marginfigure}
+Photo by David Grandmougin on Unsplash.
+```
+
+A key part of [Pokémon Go](http://www.Pokémongo.com/) is using evolutions to 
+get stronger Pokémon, and a deeper understanding of evolutions is key to being 
+the greatest Pokémon Go player of all time. The data set you will be working 
+with for this assignment covers 75 Pokémon evolutions spread across four 
+species. A wide set of variables are provided, allowing a deeper dive into what 
+characteristics are important in predicting a Pokémon's final combat power (CP).
+
+# Getting started
+
+Go to your email and accept the repo for this homework assignment. The name of 
+the repo is `hw-04-pokemon-GITHUBNAME`, where `GITHUBNAME` is your GitHub
+username. This repo contains a template R Markdown file that you can build on 
+to complete your assignment.  
+
+Clone your repo to RStudio Cloud, and then configure your name and email address 
+for Git. To do so, follow these steps:
+
+- Go to the *Terminal* pane
+- Type the following two lines of code, replacing the information in the quotation marks with your info:
+
+```{bash eval=FALSE}
+git config --global user.email "your email"
+git config --global user.name "your name"
+```
+
+Before you move further, also update your project name from *Untitled Project* to
+*HW 04 - Pokemon*.
+
+In the R Markdown file in your project, update your name, knit the document, 
+commit, and push. 
+
+At this point you might be getting tired of having to type your username and 
+password everytime you push to GitHub. If you would like your git password 
+cached for a week for this project, type the following in the Terminal:
+
+```{marginfigure}
+60 seconds per minute * 60 minutes per hour * 24 hours per day * 7 days per week = 604800 seconds
+```
+
+```{bash eval=FALSE}
+git config --global credential.helper 'cache --timeout 604800'
+```
+
+# Analysis
+
+## Data
+
+The dataset for this assignment can be found as a csv file at [here](https://www.openintro.org/stat/data/?data=Pokémon). The variable 
+descriptions are as follows:
+
+- `name`: A unique name given to the Pokémon
+- `species`: The Pokémon's type, e.g. Pidgey.
+- `cp`: Pre-evolution Combat Power, which is a summary of the Pokémon's strength 
+for battling prior to the evolution of the Pokémon.
+- `hp`: Pre-evolution Hit Points, which is a summary of how difficult it is to 
+weaken the Pokémon in a battle.
+- `weight`: Pre-evolution weight, in kilograms.
+- `height`: Pre-evolution height, in meters.
+- `power_up_stardust`: Pre-evolution stardust required to power up the Pokémon.
+- `power_up_candy`: Pre-evolution candy required to power up the Pokémon.
+- `attack_weak`: The name of the pre-evolution weaker attack of the Pokémon.
+- `attack_weak_type`: The type of the pre-evolution weaker attack.
+- `attack_weak_value`: The damage done by the pre-evolution weaker attack.
+- `attack_strong`: The name of the pre-evolution stronger attack.
+- `attack_strong_type`: The type of the pre-evolution stronger attack.
+- `attack_strong_value`: The damage done by the pre-evolution stronger attack.
+- `cp_new`: Post-evolution Combat Power.
+- `hp_new`: Post-evolution Hit Points.
+- `weight_new`: Post-evolution weight, in kilograms.
+- `height_new`: Post-evolution height, in meters.
+- `power_up_stardust_new`: Post-evolution stardust required to power up the 
+Pokémon.
+- `power_up_candy_new`: Post-evolution candy required to power up the Pokémon.
+- `attack_weak_new`: The name of the post-evolution weaker attack.
+- `attack_weak_type_new`: The type of the post-evolution weaker attack.
+- `attack_weak_value_new`: The damage done by the post-evolution weaker attack.
+- `attack_strong_new`: The name of the post-evolution stronger attack.
+- `attack_strong_type_new`: The type of the post-evolution stronger attack.
+- `attack_strong_value_new`: The damage done by the post-evolution stronger 
+attack.
+- `notes`: Any additional notes made while collecting the data.
+
+## Packages
+
+In this lab we will work with the `tidyverse` and `scales` packages. This package 
+has already been installed for you, and is loaded in your R Markdown file as well.
+
+If you'd like to run your code in the Console as well you'll also need to 
+load the packages there. To do so, run the following in the console. 
+
+```{r message = FALSE}
+library(tidyverse) 
+library(scales) 
+```
+
+## Exercises
+
+1. Calculate the diference in heights pre and post evolution and save this as a 
+new variable, `height_diff`. Calculate the percentage of Pokémon that grew 
+during evolution. Also visualize the distribution of change in height by 
+species and provide a discussion of how change in height varies across species.
+
+*This is a good place to pause, commit changes with an informative commit message, and push. Make sure to commit and push all changed files.*
+
+2. Pick two categorical variables and make a bar plot that depicts the 
+relationship between them. These can be variables from the original data or 
+ones that you create based on the given data.
+
+*This is another good place to pause, commit changes with an informative commit message, and push. Make sure to commit and push all changed files.*
+
+3. Pick a numerical and a categorical variable, and construct side-by-side box 
+plots depicting the relationship between them.
+
+*Don't forget to commit and push your changes sporadically while working on your homework assignment.*
+
+4. Learn something new: violin plots! Read about them at http://ggplot2.tidyverse.org/reference/geom_violin.html, 
+and convert your side-by-side box plots from the previous task to violin plots. 
+What do the violin plots reveal that box plots do not? What features are 
+apparent in the box plots but not in the violin plots?
+
+5. Recreate the following plot, and interpret what you see in context of the data.
+
+```{r echo=FALSE, message=FALSE}
+pokemon <- read_csv("data/pokemon.csv")
+pokemon %>% 
+  filter(species != "Weedle") %>%
+  ggplot(aes(x = species, fill = attack_weak)) + 
+    geom_bar(position="dodge") + 
+    coord_flip() +
+    labs(x = "Species", y = "Frequency", fill = "Attack weak",
+         title = "Pre-evolution weaker attack of Pokémon",
+         subtitle = "by species") +
+    theme_minimal()
+```
+
+6. Recreate the following plot. Note that `height_diff` refers to difference in 
+height between pre and post-evolution, and `weight_diff` is calculated similarly.
+
+```{marginfigure}
+Hint: The colors are from the viridis color palette. Take a look at the functions 
+starting with `scale_viridis_*`.
+```
+
+```{r echo=FALSE}
+pokemon %>%
+  mutate(
+    weight_diff = weight_new - weight,
+    height_diff = height_new - height
+  ) %>%
+  ggplot(aes(x = height_diff, y = weight_diff, color = species)) +
+    geom_point(position = "jitter") +
+    scale_color_viridis_d() +
+    theme_minimal()
+```
+
+7. Rework the previous plot using principles of effective data visualizations 
+we have learned about in class. Then, deescribe the relationship between the 
+changes in heights and weights of Pokemon and their species.
+
+8. Describe what the following code is doing in each line, and interpret 
+the numbers in the output.
+
+```{marginfigure}
+Hint: We use the `::` operator to explicitly indicate that the FUN in 
+`PKG::FUN` is in the PKG.
+```
+
+```{r}
+pokemon %>%
+  group_by(species, attack_weak_type_new) %>%
+  summarise(n = n()) %>%
+  mutate(prop = scales::percent(n / sum(n)))
+```
+
+
+9. What characteristics correspond to an evolved Pokémon with a high combat 
+power? You do not need to come up with an exhaustive list, but you should walk 
+us through your reasoning for answering this question and include all relevant 
+summary statistics and visualizations.
+
+# Getting help
+
+Use the #questions channel on Slack.
+
+- R errors/questions: Make a minimum reproducible example instead of sharing 
+large portions of your code.
+- Git/GitHub errors/questions: Clearly outline your steps that got you to the 
+point you're in.
+
+You are also welcomed to discuss the homework with each other broadly 
+(no sharing code!) as well as ask questions at office hours.
