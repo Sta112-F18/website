@@ -4,7 +4,6 @@ author: "Dr. Çetinkaya-Rundel"
 output:
   xaringan::moon_reader:
     css: "../slides.css"
-    logo: "../sta112-hex.png"
     lib_dir: libs
     nature:
       highlightLines: true

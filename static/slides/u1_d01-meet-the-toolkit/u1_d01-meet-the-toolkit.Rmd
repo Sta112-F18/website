@@ -4,8 +4,7 @@ author: ""
 output:
   xaringan::moon_reader:
     css: "../slides.css"
-    logo: "../dsbox-logo.png"
-    lib_dir: libs
+    lob_dir: libs
     nature:
       highlightStyle: github
       highlightLines: true
