@@ -76,7 +76,7 @@ git config --global credential.helper 'cache --timeout 604800'
 
 ## Data
 
-The dataset for this assignment can be found as a csv file at [here](https://www.openintro.org/stat/data/?data=Pokémon). The variable 
+The dataset for this assignment can be found as a csv file at [here](https://www.openintro.org/stat/data/?data=pokemon). The variable 
 descriptions are as follows:
 
 - `name`: A unique name given to the Pokémon
