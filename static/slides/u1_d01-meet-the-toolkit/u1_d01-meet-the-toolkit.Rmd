@@ -1,5 +1,5 @@
 ---
-title: "Meet the toolkit <br> 🛠"
+title: "Meet the toolkit <br> `r emo::ji('hammer_and_pick')`"
 author: ""
 output:
   xaringan::moon_reader:
