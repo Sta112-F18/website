@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Merge conflicts   🤜 🤛</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Dr. Çetinkaya-Rundel" />
+    <link href="libs/font-awesome/css/fa-svg-with-js.css" rel="stylesheet" />
+    <script src="libs/font-awesome/js/fontawesome-all.min.js"></script>
+    <script src="libs/font-awesome/js/fa-v4-shims.min.js"></script>
+    <link rel="stylesheet" href="../slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Merge conflicts <br> 🤜 🤛
+### Dr. Çetinkaya-Rundel
+
+---
+
+
+
+
+
+layout: true
+  
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Mine Çetinkaya-Rundel -
+&lt;a href="http://www2.stat.duke.edu/courses/Fall18/sta112.01/schedule" target="_blank"&gt;stat.duke.edu/courses/Fall18/sta112.01
+&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
+
+class: center, middle
+
+# What is a merge conflict?
+
+---
+
+## Merge conflicts
+
+When two collaborators make changes to a file and push the file to their repo, 
+git merges these two files.
+
+&lt;img src="img/merge-no-conflict.png" width="400" style="display: block; margin: auto;" /&gt;
+
+--
+
+If these two files have conflicting content on the same line, git will produce a 
+**merge conflict**.
+
+&lt;img src="img/merge-conflict.png" width="400" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Resolving merge conflicts
+
+- Merge conflicts need to be resolved manually, as they require a human intervention
+
+&lt;img src="img/merge-conflict-identifiers.png" width="800" style="display: block; margin: auto;" /&gt;
+
+- To resolve the merge conflict
+  - decide if you want to keep only your text or the text on GitHub or 
+  incorporate changes from both texts
+  - delete the conflict markers `&lt;&lt;&lt;&lt;&lt;&lt;&lt;`, `=======`, `&gt;&gt;&gt;&gt;&gt;&gt;&gt;` and make the 
+  changes you want in the final merge
+
+---
+
+class: center, middle
+
+# Application exercise
+
+---
+
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; AE 06 - Merge conflics
+
+- Clone your assignment repo in RStudio Cloud (`ae-06-merge-conflics-TEAMNAME`), 
+and open the R Markdown file.
+- Assign the numbers 1, 2, 3, and 4 to each of the team members.
+- Take turns in completing the exercise, only one member at a time:
+.midi[
+- Member 1: Change the team name to your team name, knit, commit, push.
+- Member 2: Change the team name to something else, knit, commit, push. You 
+will get an error. Pull. Review the document with the merge conflict. Resolve 
+the conflict with the preferred change. Commit and push.
+- Member 3: Create a plot displaying the relationship between `price` and `carat`, 
+controlling for `cut` of the diamonds (see next slide for the plot). Knit, 
+commit, push. You will get an error, read it, and pull. No merge conflicts should 
+occur. Now push.
+- Member 4: Set the `alpha` level to `0.5`. Knit, commit, push. You will get 
+an error. Pull. Review the document with the merge conflict. Clear the 
+merge conflict by choosing the correct/preferred change. Commit, and push.
+- All members: Pull, and observe the changes in your document.
+]
+
+---
+
+class: middle
+
+Plot for Member 3 to recreate (the others can help of course!):
+
+![](u1_d05-merge-conflicts_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+---
+
+class: center, middle
+
+# Review
+
+---
+
+.question[
+What does the following message mean?
+]
+
+&lt;br&gt;
+
+&lt;img src="img/merge-conflict-error.png" width="800" style="display: block; margin: auto;" /&gt;
+
+---
+
+.question[
+What does the following message mean?
+]
+
+&lt;br&gt;
+
+&lt;img src="img/merge-failed.png" width="800" style="display: block; margin: auto;" /&gt;
+
+---
+
+.question[
+What does the following message mean?
+]
+
+&lt;br&gt;
+
+&lt;img src="img/no-merge-conflict.png" width="800" style="display: block; margin: auto;" /&gt;
+
+---
+
+.question[
+What does the following message mean?
+]
+
+&lt;br&gt;
+
+&lt;img src="img/merge-made.png" width="800" style="display: block; margin: auto;" /&gt;
+
+---
+
+## Tips for collaborating via GitHub
+
+- Always pull first before you start working.
+- Commit, and push, often to minimize merge conflicts and/or to make merge conflicts easier to resolve.
+- If you find yourself in a situation that is difficult to resolve, ask questions asap, don't let it linger and get bigger.
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "solarized-dark",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
