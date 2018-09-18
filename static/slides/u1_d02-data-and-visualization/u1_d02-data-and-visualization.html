@@ -34,6 +34,19 @@ Dr. Mine Çetinkaya-Rundel -
 
 
 
+layout: true
+  
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Mine Çetinkaya-Rundel -
+&lt;a href="http://www2.stat.duke.edu/courses/Fall18/sta112.01/schedule" target="_blank"&gt;stat.duke.edu/courses/Fall18/sta112.01
+&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
 
 class: center, middle
 
@@ -102,7 +115,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
 ## Warning: Removed 28 rows containing missing values (geom_point).
 ```
 
-![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -120,7 +133,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
        x = "Height (cm)", y = "Weight (kg)")
 ```
 
-![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -258,7 +271,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
 ## Warning: Removed 28 rows containing missing values (geom_point).
 ```
 
-![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -289,7 +302,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
 *      x = "Height (cm)", y = "Weight (kg)")
 ```
 
-![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -339,7 +352,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass, color = gender)) +
   geom_point()
 ```
 
-![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -355,7 +368,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass, color = gender,
   geom_point()
 ```
 
-![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -370,7 +383,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass, color = gender)) +
 * geom_point(size = 2)
 ```
 
-![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -412,7 +425,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
        x = "Height (cm)", y = "Weight (kg)")
 ```
 
-![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -443,7 +456,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
   facet_grid(gender ~ .)
 ```
 
-![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -454,7 +467,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
   facet_grid(. ~ gender)
 ```
 
-![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -465,7 +478,7 @@ ggplot(data = starwars, mapping = aes(x = height, y = mass)) +
   facet_wrap(~ eye_color)
 ```
 
-![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
 
 ---
 
@@ -530,7 +543,7 @@ ggplot(data = starwars, mapping = aes(x = height)) +
 ## Warning: Removed 6 rows containing non-finite values (stat_bin).
 ```
 
-![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -548,7 +561,7 @@ ggplot(data = starwars, mapping = aes(x = height)) +
 ## Warning: Removed 6 rows containing non-finite values (stat_density).
 ```
 
-![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -566,7 +579,7 @@ ggplot(data = starwars, mapping = aes(y = height, x = gender)) +
 ## Warning: Removed 6 rows containing non-finite values (stat_boxplot).
 ```
 
-![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -586,7 +599,7 @@ ggplot(data = starwars, mapping = aes(x = gender)) +
   geom_bar()
 ```
 
-![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -600,7 +613,7 @@ ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color)) +
   geom_bar()
 ```
 
-![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -615,7 +628,7 @@ ggplot(data = starwars, mapping = aes(x = gender, fill = hair_color)) +
   labs(y = "proportion")
 ```
 
-![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+![](u1_d02-data-and-visualization_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
 ]
 
 ---
