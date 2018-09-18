@@ -93,6 +93,9 @@ class: middle
 
 Plot for Member 3 to recreate (the others can help of course!):
 
+- data: `diamonds`
+- variables: `carat`, `price`, `cut`
+
 ```{r echo=FALSE}
 ggplot(data = diamonds, aes(x = carat, y = price, color = cut)) +
   geom_point()
