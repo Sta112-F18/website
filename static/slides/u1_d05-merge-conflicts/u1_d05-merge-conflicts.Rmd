@@ -68,7 +68,7 @@ class: center, middle
 
 ## <i class="fas fa-laptop"></i> AE 06 - Merge conflics
 
-- Clone your assignment repo in RStudio Cloud (`ae-06-merge-conflics-TEAMNAME`), 
+- Clone your assignment repo in RStudio Cloud (`ae-06-merge-conflicts-TEAMNAME`), 
 and open the R Markdown file.
 - Assign the numbers 1, 2, 3, and 4 to each of the team members.
 - Take turns in completing the exercise, only one member at a time:
