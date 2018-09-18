@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Implementing principles for effective visualizations in R   👩‍🎨</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Dr. Çetinkaya-Rundel" />
+    <link href="libs/font-awesome/css/fa-svg-with-js.css" rel="stylesheet" />
+    <script src="libs/font-awesome/js/fontawesome-all.min.js"></script>
+    <script src="libs/font-awesome/js/fa-v4-shims.min.js"></script>
+    <link rel="stylesheet" href="../slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Implementing principles for effective visualizations in R <br> 👩‍🎨
+### Dr. Çetinkaya-Rundel
+
+---
+
+
+
+
+
+layout: true
+  
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Mine Çetinkaya-Rundel -
+&lt;a href="http://www2.stat.duke.edu/courses/Fall18/sta112.01/schedule" target="_blank"&gt;stat.duke.edu/courses/Fall18/sta112.01
+&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
+
+
+## Which is the best?
+
+&lt;iframe width="840" height="473" src="https://www.youtube.com/embed/AuJFuEq-qD8" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen&gt;&lt;/iframe&gt;
+
+---
+
+class: center, middle
+
+# Principles	for	effective	visualizations
+
+---
+
+## Principles	for	effective	visualizations
+
+- Order matters
+- Put long categories on the y-axis
+- Keep	scales consistent
+- Select meaningful colors
+- Use meaningful and nonredundant labels
+
+---
+
+## Data
+
+A SurveyUSA poll&lt;sup&gt;✦&lt;/sup&gt; asked 722 Los Angeles residents who described themselves as 
+paying attention to the news about Brett Kavanaugh's confirmation to the Supreme 
+Court of the United States the following question:
+
+&gt;Which best describes you:  
+&gt;I strongly support Kavanaugh's confirmation.  
+&gt;I support Kavanaugh's confirmation.  
+&gt;I oppose Kavanaugh's confirmation.  
+&gt;I strongly oppose Kavanaugh's confirmation.  
+
+
+
+
+.footnote[ 
+&lt;sup&gt;✦&lt;/sup&gt; Results of [SurveyUSA News Poll #24330](http://www.surveyusa.com/client/PollReport.aspx?g=b2c0e27f-02cc-4fde-8e6f-a026fe2f055f), retrieved Sep 18, 2018.
+]
+
+---
+
+class: center, middle
+
+# Order matters
+
+---
+
+## Alphabetical order rarely ideal
+
+
+```r
+ggplot(data = bk, aes(x = opinion)) +
+  geom_bar()
+```
+
+![](u1_d06-effective-data-viz-R_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+
+---
+
+## Use inherent level order
+
+
+```r
+bk &lt;- bk %&gt;%
+  mutate(
+    opinion = fct_relevel(opinion, "Strongly support", "Support", "Oppose", 
+                                   "Strongly oppose", "Not sure")
+  )
+
+ggplot(data = bk, aes(x = opinion)) +
+  geom_bar()
+```
+
+![](u1_d06-effective-data-viz-R_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+
+`fct_relevel`: Reorder factor levels using a custom order
+
+---
+
+## Alphabetical order rarely ideal
+
+
+```r
+ggplot(data = bk, aes(x = race)) +
+  geom_bar()
+```
+
+![](u1_d06-effective-data-viz-R_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+
+---
+
+## Order by frequency
+
+
+```r
+ggplot(data = bk, aes(x = fct_infreq(race))) +
+  geom_bar()
+```
+
+![](u1_d06-effective-data-viz-R_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+
+`fct_infreq`: Reorder factors levels by frequency
+
+---
+
+## Clean up labels
+
+
+```r
+ggplot(data = bk, aes(x = fct_infreq(race))) +
+  geom_bar() +
+  labs(x = "Race", y = "Count")
+```
+
+![](u1_d06-effective-data-viz-R_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+---
+
+class: center, middle
+
+# Put long categories on 
+# the y-axis
+
+---
+
+## Long categories can be hard to read
+
+
+```r
+ggplot(data = bk, aes(x = opinion)) +
+  geom_bar()
+```
+
+![](u1_d06-effective-data-viz-R_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+---
+
+## Move them to the y-axis
+
+
+```r
+ggplot(data = bk, aes(x = opinion)) +
+  geom_bar() +
+  coord_flip()
+```
+
+![](u1_d06-effective-data-viz-R_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+
+---
+
+class: center, middle
+
+# Pick a purpose
+
+---
+
+## Segmented bar plots can be hard to read
+
+
+```r
+ggplot(data = bk, aes(x = opinion, fill = race)) +
+  geom_bar() +
+  coord_flip()
+```
+
+![](u1_d06-effective-data-viz-R_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+
+---
+
+## Use facets
+
+
+```r
+ggplot(data = bk, aes(x = opinion, fill = race)) +
+  geom_bar() +
+  coord_flip() +
+  facet_grid(. ~ race)
+```
+
+![](u1_d06-effective-data-viz-R_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+
+---
+
+## Avoid redundancy
+
+
+```r
+ggplot(data = bk, aes(x = opinion)) +
+  geom_bar() +
+  coord_flip() +
+  facet_grid(. ~ race)
+```
+
+![](u1_d06-effective-data-viz-R_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+
+---
+
+## Clean up labels
+
+
+```r
+ggplot(data = bk, aes(x = opinion)) +
+  geom_bar() +
+  coord_flip() +
+  facet_grid(. ~ race) +
+  labs(title = "Opinion on Brett Kavanaugh's confirmation", x = "", y = "")
+```
+
+![](u1_d06-effective-data-viz-R_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+---
+
+class: center, middle
+
+# Select meaningful colors
+
+---
+
+## Ordinal data aren't well represented by rainbow colors
+
+
+```r
+ggplot(data = bk, aes(x = race, fill = opinion)) +
+  geom_bar(position = "fill") +
+  coord_flip()
+```
+
+![](u1_d06-effective-data-viz-R_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+---
+
+## Viridis scale works well with ordinal data 
+
+
+```r
+ggplot(data = bk, aes(x = race, fill = opinion)) +
+  geom_bar(position = "fill") +
+  coord_flip() +
+  scale_fill_viridis_d()
+```
+
+![](u1_d06-effective-data-viz-R_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+
+---
+
+## Clean up labels
+
+
+```r
+ggplot(data = bk, aes(x = race, fill = opinion)) +
+  geom_bar(position = "fill") +
+  coord_flip() +
+  scale_fill_viridis_d() +
+  labs(title = "Opinion on Brett Kavanaugh's confirmation", 
+       subtitle = "by race", x = "", y = "", fill = "")
+```
+
+![](u1_d06-effective-data-viz-R_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+---
+
+## Acknowledgements
+
+These slides are based on earlier work by [Angela Zoss, Ph.D.](https://library.duke.edu/about/directory/staff/6881), Assessment &amp; Data Visualization Analyst at Duke University Libraries.
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "solarized-dark",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

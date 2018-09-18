@@ -34,7 +34,7 @@ lessons:
   title: "Merge conflicts"
   slides: "u1_d05-merge-conflicts/u1_d05-merge-conflicts.html"
   hw: "hw-04/hw-04.html"
-- title: "Tips for effective data visualization in R"
+- title: "Implementing principles for effective visualizations in R"
   slides: "u1_d06-effective-data-viz-R/u1_d06-effective-data-viz-R.html"
 - date: "Thur, Sep 20"
   title: "Confounding variables and Simpson's paradox"
