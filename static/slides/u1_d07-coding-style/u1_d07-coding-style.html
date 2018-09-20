@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Coding style   👗</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Dr. Çetinkaya-Rundel" />
+    <link href="libs/font-awesome/css/fa-svg-with-js.css" rel="stylesheet" />
+    <script src="libs/font-awesome/js/fontawesome-all.min.js"></script>
+    <script src="libs/font-awesome/js/fa-v4-shims.min.js"></script>
+    <link rel="stylesheet" href="../slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Coding style <br> 👗
+### Dr. Çetinkaya-Rundel
+
+---
+
+
+
+
+
+layout: true
+  
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Mine Çetinkaya-Rundel -
+&lt;a href="http://www2.stat.duke.edu/courses/Fall18/sta112.01/schedule" target="_blank"&gt;stat.duke.edu/courses/Fall18/sta112.01
+&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
+
+
+## Announcements
+
+- Peer evaluations for your teammates due Friday (tomorrow!) evening
+  - Look for an email from TEAMMATES after class, ping me/Eidan if you don't see 
+  it in your inbox by this afternoon
+- HW 05 due next Tuesday
+- MT 01 assigned next Thursday, due following Tuesday
+
+---
+
+class: center, middle
+
+# Coding style
+
+---
+
+## Style guide
+
+&gt;"Good coding style is like correct punctuation: you can manage without it, butitsuremakesthingseasiertoread."
+&gt;
+&gt;Hadley Wickham
+
+- Style guide for this course is based on the Tidyverse style guide: http://style.tidyverse.org/
+- There's more to it than what we'll cover today, but we'll mention more as we 
+introduce more functionality, and do a recap later in the semester
+
+---
+
+## File names and code chunk labels
+
+- Do not use spaces in file names and code chunk labels, use `-` or `_` to 
+separate words
+- Use all lowercase letters
+
+
+```r
+# Good
+ucb-admit.csv
+
+# Bad
+UCB Admit.csv
+```
+
+---
+
+## Object names
+
+- Use `_` to separate words in object names
+- Use informative but short object names
+- Do not reuse object names within an analysis
+
+
+```r
+# Good
+acs_employed
+
+# Bad
+acs.employed
+acs2
+acs_subset
+acs_subsetted_for_males
+```
+
+---
+
+## Spacing
+
+- Put a space before and after all infix operators (=, +, -, &lt;-, etc.), and when 
+naming arguments in function calls
+- Always put a space after a comma, and never before (just like in regular English)
+
+
+```r
+# Good
+average &lt;- mean(feet / 12 + inches, na.rm = TRUE)
+
+# Bad
+average&lt;-mean(feet/12+inches,na.rm=TRUE)
+```
+
+---
+
+## ggplot2
+
+- Always end a line with `+`
+- Always indent the next line
+
+
+```r
+# Good
+ggplot(diamonds, mapping = aes(x = price)) +
+  geom_histogram()
+
+# Bad
+ggplot(diamonds,mapping=aes(x=price))+geom_histogram()
+```
+
+---
+
+## dplyr
+
+- Always end a line with `%&gt;%`, except for one-step pipes
+- Always indent the next line
+
+
+```r
+# Good
+diamonds %&gt;% filter(cut == "Fair")
+diamonds %&gt;% 
+  filter(cut == "Fair") %&gt;%
+  summarise(mean_price = mean(price))
+
+# Bad
+diamonds %&gt;% filter(cut == "Fair") %&gt;% summarise(mean_price = mean(price))
+diamonds %&gt;% 
+filter(cut == "Fair") %&gt;%
+summarise(mean_price = mean(price))
+```
+
+---
+
+## ggplot2 + dplyr
+
+- Further indent ggplot2 code following a dplyr pipeline
+
+
+```r
+# Good
+diamonds %&gt;% 
+  filter(cut == "Fair") %&gt;%
+  ggplot(aes(x = carat, y = price)) +
+    geom_point() +
+    labs(title = "Price vs. carat for fair diamonds")
+
+# Bad
+diamonds %&gt;% 
+  filter(cut == "Fair") %&gt;%
+  ggplot(aes(x = carat, y = price)) +
+  geom_point() +
+  labs(title = "Price vs. carat for fair diamonds")
+```
+
+---
+
+## Long lines
+
+- Limit your code to 80 characters per line. This fits comfortably on a printed 
+page with a reasonably sized font
+  - Tools `\(\rightarrow\)` Global options `\(\rightarrow\)` Display `\(\rightarrow\)` check 
+  Show margin
+- Take advantage of RStudio editor's auto formatting for indentation at line breaks
+
+---
+
+## Assignment
+
+- Use `&lt;-` not `=`
+
+
+```r
+# Good
+x &lt;- 2
+
+# Bad
+x = 2
+```
+
+
+---
+
+## Quotes
+
+- Use `"`, not `'`, for quoting text
+- The only exception is when the text already contains double quotes and no 
+single quotes
+
+
+```r
+ggplot(diamonds, mapping = aes(x = price)) +
+  geom_histogram() +
+  # Good
+  labs(title = "`Shine bright like a diamond`",
+  # Good
+       x = "Diamond prices",
+  # Bad
+       y = 'Frequency')
+```
+
+---
+
+## Commenting
+
+- Use comments sparingly, instead describe important findings and decisions in text
+- If you need comments to explain what your code is doing, consider rewriting 
+your code to be clearer
+- Leave one space after `#` 
+- Place comments above the code when possible
+
+
+```r
+# Good
+x &lt;- 2
+
+x = 2#Bad
+```
+
+
+---
+
+## 📦 styler
+
+.pull-left[
+- The goal of **styler** is to provide non-invasive pretty-printing of R code 
+adhering to the **tidyverse** formatting rules
+- You can use the *Style selection* or *Style active file* addins to use 
+the package functionality
+  - But styler doesn't catch all deviations from the guidelines we outlined,  
+  make sure to do a thorough review of your code!
+]
+.pull-right[
+![](img/styler.gif)&lt;!-- --&gt;
+]
+
+---
+
+class: center, middle
+
+# Application exercise
+
+---
+
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; AE 07 - Coding style
+
+- Clone your assignment repo in RStudio Cloud (`ae-07-coding-style-TEAMNAME`), 
+and open the R Markdown file.
+- Review the document and make any stylistic corrections needed.
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "solarized-dark",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

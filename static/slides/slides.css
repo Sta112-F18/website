@@ -9,7 +9,7 @@ body {
 }
 p {
   padding: 0;
-  margin: 12px;
+  margin: 0px;
 }
 h2 {
   font-family: 'Source Sans Pro', sans-serif;
@@ -52,6 +52,7 @@ a, a > code {
 .remark-code, .remark-inline-code { 
   font-family: 'Inconsolata', 'Lucida Console', Monaco, monospace; 
   color: #919191;
+  font-size: 22px;
 }
 
 /* Two-column layout */
