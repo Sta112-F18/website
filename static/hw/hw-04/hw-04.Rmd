@@ -185,7 +185,7 @@ pokemon %>%
 ```
 
 7. Rework the previous plot using principles of effective data visualizations 
-we have learned about in class. Then, deescribe the relationship between the 
+we have learned about in class. Then, describe the relationship between the 
 changes in heights and weights of Pokemon and their species.
 
 8. Describe what the following code is doing in each line, and interpret 
