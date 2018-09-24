@@ -120,7 +120,7 @@ ol>li {
 	width: 90%;
 	padding-top: 10px;
 	padding-bottom: 10px;
-	padding-right: 0;
+	padding-right: 10px;
 	padding-left: 90px;
 }
 
@@ -130,6 +130,7 @@ ol>li:before {
 	/* Increment the counter by 1 */
 	counter-increment: li;
 	position: absolute;
+	padding-right: 10px;
 	color: #A7D5E8;
 	left: -0.5px;
 	font-weight: bold;
