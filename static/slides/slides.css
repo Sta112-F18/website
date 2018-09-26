@@ -51,9 +51,10 @@ a, a > code {
 }
 .remark-code, .remark-inline-code { 
   font-family: 'Inconsolata', 'Lucida Console', Monaco, monospace; 
-  color: #919191;
+  /* color: #919191; */
   font-size: 22px;
 }
+
 
 /* Two-column layout */
 .left-column {
@@ -144,6 +145,7 @@ li{
 .large { font-size: 130% }
 .midi { font-size: 85% }
 .small { font-size: 70% }
+.tiny { font-size: 50% }
 
 
 /* Embedded images */

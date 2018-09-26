@@ -1,6 +1,6 @@
 ---
 title: "Reading 01"
-date: "Due: Aug 30 at 10am"
+date: "Due: Aug 30"
 output: 
   html_document: 
     theme: yeti
