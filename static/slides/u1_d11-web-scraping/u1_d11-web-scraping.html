@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Web scraping   🕸</title>
+    <meta charset="utf-8">
+    <meta name="author" content="" />
+    <link href="libs/font-awesome/css/fa-svg-with-js.css" rel="stylesheet" />
+    <script src="libs/font-awesome/js/fontawesome-all.min.js"></script>
+    <script src="libs/font-awesome/js/fa-v4-shims.min.js"></script>
+    <link rel="stylesheet" href="../slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Web scraping <br> 🕸
+
+---
+
+
+
+
+
+layout: true
+  
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Mine Çetinkaya-Rundel -
+&lt;a href="http://www2.stat.duke.edu/courses/Fall18/sta112.01/schedule" target="_blank"&gt;stat.duke.edu/courses/Fall18/sta112.01
+&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
+
+class: center, middle
+
+# Scraping the web
+
+---
+
+## Scraping the web: what? why?
+
+- Increasing amount of data is available on the web
+--
+
+- These data are provided in an unstructured format: you can always copy&amp;paste, 
+but it's time-consuming and prone to errors
+
+--
+- Web scraping is the process of extracting this information automatically and transform it into a structured dataset
+
+--
+- Two different scenarios:
+    - Screen scraping: extract data from source code of website, with html 
+    parser (easy) or regular expression matching (less easy).
+    - Web APIs (application programming interface): website offers a set of 
+    structured http requests that return JSON or XML files.
+
+---
+
+class: center, middle
+
+# Web Scraping with rvest
+
+---
+
+## Hypertext Markup Language
+
+- Most of the data on the web is still largely available as HTML 
+- It is structured (hierarchical / tree based), but it''s often not available in 
+a form useful for analysis (flat / tidy).
+
+```html
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;This is a title&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;p align="center"&gt;Hello world!&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+```
+
+---
+
+## rvest
+
+.pull-left[
+- The **rvest** package makes basic processing and manipulation of HTML data straight forward
+- It's designed to work with pipelines built with `%&gt;%`
+]
+.pull-right[
+&lt;img src="img/rvest.png" width="230" style="display: block; margin: auto 0 auto auto;" /&gt;
+]
+
+---
+
+## Core rvest functions
+
+- `read_html`   - Read HTML data from a url or character string
+- `html_node `  - Select a specified node from HTML document
+- `html_nodes`  - Select specified nodes from HTML document
+- `html_table`  - Parse an HTML table into a data frame
+- `html_text`   - Extract tag pairs' content
+- `html_name`   - Extract tags' names
+- `html_attrs`  - Extract all of each tag's attributes
+- `html_attr`   - Extract tags' attribute value by name
+
+---
+
+## SelectorGadget
+
+.pull-left[
+- Open source tool that eases CSS selector generation and discovery
+- Easiest to use with the [Chrome Extension](https://chrome.google.com/webstore/detail/selectorgadget/mhjhnkcfbdhnjickkkdbjoemdmbfginb) 
+- Find out more on the [SelectorGadget vignette](https://cran.r-project.org/web/packages/rvest/vignettes/selectorgadget.html)
+]
+.pull-right[
+&lt;img src="img/selector-gadget.png" width="456" /&gt;
+]
+
+---
+
+## Using the SelectorGadget
+
+.pull-left[
+- Click on the app logo next to the search bar
+- A box will open in the bottom right of the website
+]
+.pull-right[
+&lt;img src="img/selector-gadget.gif" height="250" style="display: block; margin: auto;" /&gt;
+]
+
+--
+
+- Click on a page element (it will turn green), SelectorGadget will generate a 
+minimal CSS selector for that element, and will highlight (yellow) everything 
+that is matched by the selector
+
+--
+- Click on a highlighted element to remove it from the selector (red), or 
+click on an unhighlighted element to add it to the selector
+
+--
+- Through this process of selection and rejection, SelectorGadget helps you come 
+up with the appropriate CSS selector for your needs
+
+
+---
+
+class: center, middle
+
+# Top 250 movies on IMDB
+
+---
+
+## Top 250 movies on IMDB
+
+Take a look at the source code, look for the tag `table` tag:
+&lt;br&gt;
+http://www.imdb.com/chart/top
+
+![imdb_top](img/imdb_top_250.png)
+
+---
+
+## First check if you're allowed!
+
+
+```r
+library(robotstxt)
+paths_allowed("http://www.imdb.com")
+```
+
+```
+## 
+ www.imdb.com                      No encoding supplied: defaulting to UTF-8.
+```
+
+```
+## [1] TRUE
+```
+
+vs. e.g.
+
+
+```r
+paths_allowed("http://www.facebook.com")
+```
+
+```
+## 
+ www.facebook.com
+```
+
+```
+## [1] FALSE
+```
+
+
+---
+
+## Demo
+
+&lt;img src="img/demo.png" width="320" height="200" style="display: block; margin: auto;" /&gt;
+
+&lt;br&gt;&lt;br&gt;
+
+.center[
+Go to [rstudio.cloud](https://rstudio.cloud/spaces/3518/projects)  
+Make a copy of the project titled *Demo - Web scraping*  
+Open `scrape-250.R`
+]
+
+---
+
+## Select and format pieces
+
+.midi[
+
+```r
+page &lt;- read_html("http://www.imdb.com/chart/top")
+
+titles &lt;- page %&gt;%
+  html_nodes(".titleColumn a") %&gt;%
+  html_text()
+
+years &lt;- page %&gt;%
+  html_nodes(".secondaryInfo") %&gt;%
+  html_text() %&gt;%
+  str_replace("\\(", "") %&gt;% # remove (
+  str_replace("\\)", "") %&gt;% # remove )
+  as.numeric()
+
+scores &lt;- page %&gt;%
+  html_nodes("#main strong") %&gt;%
+  html_text() %&gt;%
+  as.numeric()
+  
+imdb_top_250 &lt;- tibble(
+  title = titles, 
+  year = years, 
+  score = scores
+  )
+```
+]
+
+---
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; title &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; score &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Shawshank Redemption &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1994 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9.2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Godfather &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1972 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9.2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Godfather: Part II &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1974 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Dark Knight &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2008 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 12 Angry Men &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1957 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Schindler's List &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1993 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Lord of the Rings: The Return of the King &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2003 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Pulp Fiction &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1994 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Good, the Bad and the Ugly &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1966 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Fight Club &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1999 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Lord of the Rings: The Fellowship of the Ring &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2001 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Forrest Gump &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1994 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Star Wars: Episode V - The Empire Strikes Back &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1980 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Inception &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2010 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Lord of the Rings: The Two Towers &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2002 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## Clean up / enhance
+
+May or may not be a lot of work depending on how messy the data are
+
+- See if you like what you got:
+
+
+```r
+glimpse(imdb_top_250)
+```
+
+```
+## Observations: 250
+## Variables: 3
+## $ title &lt;chr&gt; "The Shawshank Redemption", "The Godfather", "The Godfat...
+## $ year  &lt;dbl&gt; 1994, 1972, 1974, 2008, 1957, 1993, 2003, 1994, 1966, 19...
+## $ score &lt;dbl&gt; 9.2, 9.2, 9.0, 9.0, 8.9, 8.9, 8.9, 8.9, 8.8, 8.8, 8.8, 8...
+```
+
+- Add a variable for rank
+
+```r
+imdb_top_250 &lt;- imdb_top_250 %&gt;%
+  mutate(
+    rank = 1:nrow(imdb_top_250)
+  )
+```
+
+---
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; title &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; score &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; rank &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Shawshank Redemption &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1994 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9.2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Godfather &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1972 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9.2 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Godfather: Part II &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1974 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Dark Knight &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2008 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; 12 Angry Men &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1957 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 5 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Schindler's List &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1993 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Lord of the Rings: The Return of the King &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2003 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 7 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Pulp Fiction &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1994 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.9 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Good, the Bad and the Ugly &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1966 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.8 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 9 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Fight Club &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1999 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.8 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 10 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Lord of the Rings: The Fellowship of the Ring &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2001 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.8 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 11 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Forrest Gump &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1994 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 12 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Star Wars: Episode V - The Empire Strikes Back &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 1980 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 13 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Inception &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2010 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 14 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; The Lord of the Rings: The Two Towers &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 2002 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 8.7 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; 15 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; ... &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+
+## Analyze
+
+.question[
+How would you go about answering this question: Which 1995 movies made the list?
+]
+
+--
+
+
+```r
+imdb_top_250 %&gt;% 
+  filter(year == 1995)
+```
+
+```
+## # A tibble: 8 x 4
+##   title               year score  rank
+##   &lt;chr&gt;              &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+## 1 Se7en               1995   8.6    22
+## 2 The Usual Suspects  1995   8.5    26
+## 3 Braveheart          1995   8.3    73
+## 4 Toy Story           1995   8.3    91
+## 5 Heat                1995   8.2   122
+## 6 Casino              1995   8.2   143
+## 7 Before Sunrise      1995   8.1   204
+## 8 La Haine            1995   8     229
+```
+
+---
+
+## Analyze
+
+.question[
+How would you go about answering this question: Which years have the most movies on the list?
+]
+
+--
+
+
+```r
+imdb_top_250 %&gt;% 
+  group_by(year) %&gt;%
+  summarise(total = n()) %&gt;%
+  arrange(desc(total)) %&gt;%
+  head(5)
+```
+
+```
+## # A tibble: 5 x 2
+##    year total
+##   &lt;dbl&gt; &lt;int&gt;
+## 1  1995     8
+## 2  1957     7
+## 3  2000     6
+## 4  2001     6
+## 5  2003     6
+```
+
+---
+
+## Visualize
+
+.question[
+How would you go about creating this visualization: Visualize the average yearly score for movies that made it on the top 250 list over time.
+]
+
+--
+
+.small[
+![](u1_d11-web-scraping_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+]
+---
+
+## Potential challenges
+
+- Unreliable formatting at the source
+- Data broken into many pages
+- ...
+
+.question[
+Compare the display of information at [raleigh.craigslist.org/search/apa](https://raleigh.craigslist.org/search/apa) to the list on the IMDB top 250 list. What challenges can you foresee in scraping a list of the available apartments?
+]
+
+---
+
+class: center, middle
+
+# Application exercise
+
+---
+
+## &lt;i class="fas fa-laptop"&gt;&lt;/i&gt; AE 07 - Web scraping
+
+- Clone your assignment repo in RStudio Cloud (`ae-07-web-scraping-TEAMNAME`)
+- Open the R script called `scrape-tvshows.R`
+- Scrape the names, scores, and years of most popular TV shows on IMDB:
+[www.imdb.com/chart/tvmeter](http://www.imdb.com/chart/tvmeter)
+- Create a data frame called `tvshows` with four variables 
+(`rank`, `name`, `score`, `year`)  
+- Examine each of the **first three** TV shows to also obtain 
+  - Genre
+  - Runtime
+  - How many episodes so far
+  - First five plot keywords
+- Add this information to the `tvshows` data frame you created earlier
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "solarized-dark",
+"countIncrementalSlides": false,
+"mathjax": "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

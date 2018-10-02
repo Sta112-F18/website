@@ -1,0 +1,23 @@
+---
+title: "Web scraping"
+subtitle: "Application exercise 07"
+author: "Mine Cetinkaya-Rundel"
+date: "2018-10-02"
+output: 
+  html_document: 
+    fig_height: 4
+    fig_width: 10
+---
+
+1. Clone your assignment repo in RStudio Cloud (`ae-07-web-scraping-TEAMNAME`)
+2. Open the R script called `scrape-tvshows.R`
+3. Scrape the names, scores, and years of most popular TV shows on IMDB:
+[www.imdb.com/chart/tvmeter](http://www.imdb.com/chart/tvmeter)
+4. Create a data frame called `tvshows` with four variables 
+(`rank`, `name`, `score`, `year`)  
+5. Examine each of the **first three** TV shows to also obtain 
+  - Genre
+  - Runtime
+  - How many episodes so far
+  - First five plot keywords
+6. Add this information to the `tvshows` data frame you created earlier
