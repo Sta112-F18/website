@@ -3,5 +3,6 @@
 .RData
 .Ruserdata
 docs/
-*key
+*.key
 setup.html
+*.mov
