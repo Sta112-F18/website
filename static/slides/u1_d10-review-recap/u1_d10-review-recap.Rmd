@@ -1,0 +1,216 @@
+---
+title: "Review + recap <br> `r emo::ji('billed_cap')`"
+author: ""
+output:
+  xaringan::moon_reader:
+    css: "../slides.css"
+    lib_dir: libs
+    nature:
+      highlightLines: true
+      highlightStyle: solarized-dark
+      countIncrementalSlides: false
+      mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+---
+
+```{r child = "../setup.Rmd"}
+```
+
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(dsbox)
+```
+
+## Announcements
+
+- MT 01 due Tuesday
+
+
+---
+
+class: center, middle
+
+# group_by
+
+---
+
+## What does group_by() do?
+
+`group_by()` takes an existing `tbl` and converts it into a grouped `tbl` where operations are performed "by group":
+
+.pull-left[
+```{r}
+ucbadmit
+```
+]
+.pull-right[
+```{r}
+ucbadmit %>% 
+  group_by(gender)
+```
+]
+
+---
+
+## What does group_by() not do?
+
+`group_by()` does not sort the data, `arrange()` does:
+
+.pull-left[
+```{r}
+ucbadmit %>% 
+  group_by(gender)
+```
+]
+.pull-right[
+```{r}
+ucbadmit %>% 
+  arrange(gender)
+```
+]
+
+---
+
+## What does group_by() not do?
+
+`group_by()` does not create frequency tables, `count()` does:
+
+.pull-left[
+```{r}
+ucbadmit %>% 
+  group_by(gender)
+```
+]
+.pull-right[
+```{r}
+ucbadmit %>% 
+  count(gender)
+```
+]
+
+---
+
+## Undo grouping with ungroup()
+
+.pull-left[
+```{r}
+ucbadmit %>%
+  count(gender, admit) %>%
+  group_by(gender) %>%
+  mutate(prop_admit = n / sum(n)) %>%
+  select(gender, prop_admit)
+```
+]
+.pull-right[
+```{r}
+ucbadmit %>%
+  count(gender, admit) %>%
+  group_by(gender) %>%
+  mutate(prop_admit = n / sum(n)) %>%
+  select(gender, prop_admit) %>%
+  ungroup()
+```
+]
+
+---
+
+class: center, middle
+
+# count
+
+---
+
+## count() is a short-hand
+
+`count()` is a short-hand for `group_by()` and then `summarise()` to count the number of observations in each group:
+
+.pull-left[
+```{r}
+ucbadmit %>%
+  group_by(gender) %>%
+  summarise(n = n()) 
+```
+]
+.pull-right[
+```{r}
+ucbadmit %>%
+  count(gender)
+```
+]
+
+---
+
+## count can take multiple arguments
+
+.pull-left[
+```{r}
+ucbadmit %>%
+  group_by(gender, admit) %>%
+  summarise(n = n()) 
+```
+]
+.pull-right[
+```{r}
+ucbadmit %>%
+  count(gender, admit)
+```
+]
+
+--
+
+.question[
+What is the difference between the two outputs?
+]
+
+--
+
+- `count()` ungroups after itself
+- `summarise()` peels off one layer of grouping
+- The question mark just means that the number of groups is unkown right now, it will only be computed when/if the next line is executed
+
+---
+
+## tally() is also a short-hand
+
+`tally()` is a short-hand for `summarise()`
+
+.pull-left[
+```{r}
+ucbadmit %>%
+  tally()
+```
+]
+.pull-right[
+```{r}
+ucbadmit %>%
+  summarise(n  = n())
+```
+]
+
+--
+
+<br>
+
+.question[
+What is the relationship between `count()` and `tally()`?
+]
+
+---
+
+## Relationship between count() and tally()
+
+`count()` is also a short-hand for `group_by()` and then `tally()`:
+
+.pull-left[
+```{r}
+ucbadmit %>%
+  group_by(admit) %>%
+  tally()
+```
+]
+.pull-right[
+```{r}
+ucbadmit %>%
+  count(admit)
+```
+]
+

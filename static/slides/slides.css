@@ -51,7 +51,6 @@ a, a > code {
 }
 .remark-code, .remark-inline-code { 
   font-family: 'Inconsolata', 'Lucida Console', Monaco, monospace; 
-  /* color: #919191; */
   font-size: 22px;
 }
 
