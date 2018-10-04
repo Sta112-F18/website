@@ -21,6 +21,13 @@ library(rvest)
 library(knitr)
 ```
 
+## Announcements
+
+- Go to Sakai -> Tests & Quizzes -> MT 1 Reflection, complete by Thursday
+- No IDC on Monday before Thanksgiving
+
+---
+
 class: center, middle
 
 # Scraping the web
