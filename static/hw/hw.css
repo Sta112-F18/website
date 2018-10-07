@@ -117,11 +117,9 @@ ol>li {
 	position: relative;
 	/* Disable the normal item numbering */
 	list-style: none;
-	width: 90%;
-	padding-top: 10px;
+	width: 100%;
 	padding-bottom: 10px;
-	padding-right: 10px;
-	padding-left: 90px;
+	padding-left: 110px;
 }
 
 ol>li:before {
@@ -130,9 +128,8 @@ ol>li:before {
 	/* Increment the counter by 1 */
 	counter-increment: li;
 	position: absolute;
-	padding-right: 10px;
-	color: #A7D5E8;
 	left: -0.5px;
+	color: #A7D5E8;
 	font-weight: bold;
 }
 
