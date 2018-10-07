@@ -59,6 +59,7 @@ lessons:
   exam: "exam-01.html"
 - date: "Thur, Oct 4"
   title: "Functions and automation"
+  slides: "u1_d12-functions-automation/u1_d12-functions-automation.html"
 - date: "Tue, Oct 9"
   title: "No class: Fall break 🍂"
 - date: "✅ UNIT 2:"
