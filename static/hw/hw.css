@@ -1,7 +1,8 @@
 /* * Customizing tufte.css * */
 
 @import 'https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700';
-@import 'https://fonts.googleapis.com/css?family=Source+Code+Pro';
+@import url(https://fonts.googleapis.com/css?family=Fira+Mono|Open+Sans);
+
 
 @charset "UTF-8";
 
@@ -85,7 +86,7 @@ strong {
 }
 
 code {
-	font-family: 'Source Code Pro', Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  	font-family: 'Fira Mono', monospace;
 	font-size: 15px;
 	line-height: 1.6;
 }
@@ -100,9 +101,17 @@ pre code {
 }
 
 pre {
-		width: 100%;
-		font-size: 16px;
-		overflow-x: auto;
+	width: 100%;
+	font-size: 16px;
+	overflow-x: auto;
+}
+
+p code{
+	background-color:#F6F6F6;
+}
+
+li code{
+	background-color:#F6F6F6;
 }
 
 /* Exercise counter */
@@ -135,4 +144,10 @@ ol>li:before {
 
 ol ol {
 	counter-reset: subitem;
+}
+
+/* Sublists */
+
+ul ul {
+	width: 100%;
 }
