@@ -1,7 +1,7 @@
 ---
-title: "HW 06 - Political Contributions"
+title: "HW 06 - Money in US politics"
 subtitle: "Individual assignment"
-date: "Due: Oct 11 at 10:05am"
+date: "Due: Oct 16 at 10:05am"
 output: 
   tufte::tufte_html:
     tufte_variant: "envisioned"
@@ -25,7 +25,7 @@ knitr::opts_chunk$set(eval = FALSE)
 ```
 
 ```{marginfigure}
-Photo by rawpixel on Unsplash.
+Photo by [rawpixel](https://unsplash.com/@rawpixel) on [Unsplash](https://unsplash.com/).
 ```
 
 Every election cycle brings its own brand of excitement -- and lots of money. 
@@ -34,8 +34,8 @@ other researchers studying politics and voting patterns. They are also of
 interest to citizens who want to stay informed of how much money their candidates 
 raise and where that money comes from.
 
-Do you know how the amount of funds your representatives running for house or 
-senate races have raised and spent? And how they compare to other representatives 
+Do you know how the amount of funds your candidates running for house or 
+senate races have raised and spent? And how they compare to other candidates 
 from other districts or states? In this assignment we scrape and analyze data 
 that will help us answer these questions.
 
