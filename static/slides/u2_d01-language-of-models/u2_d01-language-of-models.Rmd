@@ -17,6 +17,7 @@ output:
 
 ```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
+conflict_prefer("filter", "dplyr")
 library(rvest)
 library(knitr)
 library(broom)
@@ -41,7 +42,7 @@ class: center, middle
 
 ---
 
-## Modelling
+## Modeling
 
 - Use models to explain the relationship between variables and to make predictions
 - For now we will focus on **linear** models (but remember there are *many* *many* other types of models too!)
@@ -88,7 +89,7 @@ PhD students in the Duke Art, Law, and Markets Initiative in 2013
 ![](img/auction-video.png)
 
 .tiny[
-http://www.sothebys.com/en/news-video/videos/2014/07/Old-master-british-paintings-evening-sale-soars-over-estimate.html
+https://www.youtube.com/watch?v=apaE1Q7r4so
 ]
 
 ---
@@ -144,7 +145,7 @@ pp %>%
 
 class: center, middle
 
-# Modelling the relationship between variables
+# Modeling the relationship between variables
 
 ---
 
@@ -318,7 +319,7 @@ ggplot(data = pp, aes(x = Width_in, y = Height_in,
 ]
 ---
 
-## Extending Regession lines
+## Extending regression lines
 
 .small[
 ```{r extrapolation, warning = FALSE, fig.height=2}
@@ -334,7 +335,7 @@ ggplot(data = pp, aes(x = Width_in, y = Height_in,
 ## Models - upsides and downsides
 
 - Models can sometimes reveal patterns that are not evident in a graph of the
-data. This is a great advantage of modelling over simple visual inspection of
+data. This is a great advantage of modeling over simple visual inspection of
 data. 
 - There is a real risk, however, that a model is imposing structure that is
 not really there on the scatter of data, just as people imagine animal shapes in
