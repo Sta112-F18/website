@@ -1,0 +1,27 @@
+---
+title: "Exploring LSMS Household Data"
+subtitle: "Application exercise 09"
+author: "Claire Le Barbenchon and Federico Ferrari"
+date: "2018-10-17"
+output: 
+  html_document: 
+    fig_height: 4
+    fig_width: 10
+---
+
+- Clone your assignment repo in RStudio Cloud (`ae-09-household-explore-TEAMNAME`)
+- Clone your application exercise repo: `ae-09-household-explore-TEAMNAME`
+- Knit the R Markdown document, which will load the data
+- Review the codebook below
+- Complete the following exercises
+
+1. How many observations are there from each country?
+2. What percent of households in each country have stoves?
+3. What percent of households in each country have each of the ten assets?  
+*Hint:* Use the `summarise_at()` function for summarizing multiple variables
+at once. See the help for examples for use.
+4. Answer the following questions looking at the table of percentages you calculate
+    - Which country has the highest level of asset-holdings? 
+    - Which country has the lowest? 
+    - Do households in these countries tend to have the same asset levels, or is 
+    there lots of variability across countries?
