@@ -1,0 +1,45 @@
+---
+title: "Paris Paintings: First models"
+subtitle: "Application exercise 08"
+author: "Mine Cetinkaya-Rundel"
+date: "2018-10-02"
+output: 
+  html_document: 
+    fig_height: 4
+    fig_width: 10
+---
+
+- Clone your assignment repo in RStudio Cloud (`ae-08-first-models-pp-TEAMNAME`)
+- In your R Markdown file, load the data the way we have been doing it in the course slides, paying attention to which character strings will be labelled as `NA`s upon reading the data.
+- See [here](https://www2.stat.duke.edu/courses/Fall15/sta112.01/data/paris_paintings.html) for the full data dictionary.
+
+1. Fit the following models, and for each interpret the slope and the intercept.
+  - Model 1: Predict price of paintings from a numerical variable.
+  - Model 2: Predict log price of paintings from the same numerical variable.
+  - Model 3: Predict log price of paintings from the a categorical variable.
+  - Model 4: Predict log price of paintings from two variables: the numerical and 
+  the categorical variables you used above categorical variable.
+  
+*Note:* Model 4 requires the use of multiple regression. Suppose your data frame 
+is called `df`, your response variable is `y`, and your explanatory variables 
+are `x1` and `x2`. You can fit this model with
+
+```{r eval=FALSE}
+lm(y ~ x1+ x2, data = df)
+```
+
+and use functions like `tidy()`, `glance()`, `augment()` on the model object.
+For interpretations of coefficients, refer to your reading from Chapter 8 of 
+OpenIntro Statistics.
+
+2. Report and interpret the $R^2$ values of the models you built above.
+
+3. Using Model 4, calculate the price of a new painting. You'll need to come up 
+with new hypothetical values for the attributes of this new painting for the 
+explanatory variables you used in your model. Make sure you're not extrapolating, 
+and show how you checked this in your answer.
+
+4. Describe why transformations of variables might complicate model interpretations 
+more so than predictions made on a model.
+
+
