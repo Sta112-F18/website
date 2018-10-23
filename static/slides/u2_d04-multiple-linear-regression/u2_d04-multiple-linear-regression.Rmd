@@ -553,7 +553,9 @@ tidy(m_sms)
 
 ---
 
-## Application exercise: <br> `ae-10-model-selection-pp`
+## Application exercise: 
+
+### `ae-10-model-selection-pp`
 
 - First, plan the full model
 - Then, fit, evaluate, select
