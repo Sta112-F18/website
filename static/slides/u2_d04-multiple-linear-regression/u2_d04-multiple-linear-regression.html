@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Multiple linear regression   🤹‍♀</title>
+    <meta charset="utf-8">
+    <meta name="author" content="" />
+    <link href="libs/font-awesome/css/fa-svg-with-js.css" rel="stylesheet" />
+    <script src="libs/font-awesome/js/fontawesome-all.min.js"></script>
+    <script src="libs/font-awesome/js/fa-v4-shims.min.js"></script>
+    <script src="libs/htmlwidgets/htmlwidgets.js"></script>
+    <script src="libs/pymjs/pym.v1.js"></script>
+    <script src="libs/widgetframe-binding/widgetframe.js"></script>
+    <link rel="stylesheet" href="../slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Multiple linear regression <br> 🤹‍♀
+
+---
+
+
+
+
+
+layout: true
+  
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Mine Çetinkaya-Rundel -
+&lt;a href="http://www2.stat.duke.edu/courses/Fall18/sta112.01/schedule" target="_blank"&gt;stat.duke.edu/courses/Fall18/sta112.01
+&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
+
+## Announcements
+
+- 
+
+---
+
+class: center, middle
+
+# The linear model with multiple predictors
+
+---
+
+## Getting started
+
+**Data:** Paris Paintings
+
+
+```r
+pp &lt;- read_csv("data/paris_paintings.csv", 
+               na = c("n/a", "", "NA"))
+```
+
+---
+
+## Multiple predictors
+
+- Response variable: log(price)
+- Explanatory variables: Width and height
+
+
+```r
+m_wi_hgt &lt;- lm(log(price) ~ Width_in + Height_in, data = pp)
+tidy(m_wi_hgt)
+```
+
+```
+## # A tibble: 3 x 5
+##   term        estimate std.error statistic  p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)   4.77     0.0579      82.4  0.      
+## 2 Width_in      0.0269   0.00373      7.22 6.58e-13
+## 3 Height_in    -0.0133   0.00395     -3.36 7.93e- 4
+```
+
+--
+- Linear model:
+`$$\widehat{log(price)} = 4.77 + 0.0269 width - 0.0133 height$$`
+
+---
+
+## Visualizing models with multiple predictors
+
+<div id="htmlwidget-fc6cbc9844d8501ce7bf" style="width:100%;height:90%;" class="widgetframe html-widget"></div>
+<script type="application/json" data-for="htmlwidget-fc6cbc9844d8501ce7bf">{"x":{"url":"u2_d04-multiple-linear-regression_files/figure-html//widgets/widget_plotly.html","options":{"xdomain":"*","allowfullscreen":false,"lazyload":false}},"evals":[],"jsHooks":[]}</script>
+
+---
+
+## Exploration 1
+
+### Price, surface area, and living artist
+
+- Explore the relationship between price of paintings and surface area, conditioned 
+on whether or not the artist is still living
+- First visualize and explore, then model
+
+---
+
+## Typical surface area
+
+.question[
+What is the typical surface area for paintings?
+]
+
+![](u2_d04-multiple-linear-regression_files/figure-html/viz-surf-artistliving-1.png)&lt;!-- --&gt;
+
+--
+
+Less than 1000 square inches (which is roughly a painting that is 31in x 31in). There are very few paintings that have surface area above 5000 square inches.
+
+---
+
+## Narrowing the scope
+
+For simplicity let's focus on the paintings with `Surface &lt; 5000`:
+
+
+```r
+pp_Surf_lt_5000 &lt;- pp %&gt;%
+  filter(Surface &lt; 5000)
+```
+
+![](u2_d04-multiple-linear-regression_files/figure-html/viz-surf-lt-5000-artistliving-1.png)&lt;!-- --&gt;
+
+---
+
+## Two ways to model
+
+- **Main effects:** Assuming relationship between surface and logged price 
+**does not vary** by whether or not the artist is living.
+- **Interaction effects:** Assuming relationship between surface and logged 
+price **varies** by whether or not the artist is living.
+
+.pull-left[
+![](u2_d04-multiple-linear-regression_files/figure-html/viz-main-effects-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+![](u2_d04-multiple-linear-regression_files/figure-html/viz-interaction-effects-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Fit model with main effects
+
+- Response variable: log(price)
+- Explanatory variables: Surface area and artist living (0/1 variable)
+
+.midi[
+
+```r
+m_main &lt;- lm(log(price) ~ Surface + factor(artistliving), 
+             data = pp_Surf_lt_5000)
+tidy(m_main)
+```
+
+```
+## # A tibble: 3 x 5
+##   term                  estimate std.error statistic  p.value
+##   &lt;chr&gt;                    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)           4.88     0.0424       115.   0.      
+## 2 Surface               0.000265 0.0000415      6.39 1.85e-10
+## 3 factor(artistliving)1 0.137    0.0970         1.41 1.57e- 1
+```
+]
+
+
+--
+- Linear model:
+$$ \widehat{log(price)} = 4.88 + 0.000265~surface + 0.137~artistliving $$
+
+---
+
+## Solving the model
+
+![](u2_d04-multiple-linear-regression_files/figure-html/viz-main-effects-2-1.png)&lt;!-- --&gt;
+
+--
+- Non-living artist: Plug in 0 for `artistliving`
+`\(\widehat{log(price)} = 4.88 + 0.000265~surface + 0.137 \times 0\)`  
+`\(= 4.88 + 0.000265~surface\)`
+
+--
+- Living artist: Plug in 1 for `artistliving`
+`\(\widehat{log(price)} = 4.88 + 0.000265~surface + 0.137 \times 1\)`  
+`\(= 5.017 + 0.000265~surface\)`
+
+---
+
+## Visualizing main effects
+
+![](u2_d04-multiple-linear-regression_files/figure-html/unnamed-chunk-1-1.png)&lt;!-- --&gt;
+
+- **Same slope:** Rate of change in price as the surface area increases does 
+not vary between paintings by living and non-living artists.
+- **Different intercept:** Paintings by living artists are consistently more 
+expensive than paintings by non-living artists.
+
+---
+
+## Interpreting main effects
+
+.midi[
+
+```r
+tidy(m_main) %&gt;% 
+  mutate(exp_estimate = exp(estimate)) %&gt;%
+  select(term, estimate, exp_estimate)
+```
+
+```
+## # A tibble: 3 x 3
+##   term                  estimate exp_estimate
+##   &lt;chr&gt;                    &lt;dbl&gt;        &lt;dbl&gt;
+## 1 (Intercept)           4.88           132.  
+## 2 Surface               0.000265         1.00
+## 3 factor(artistliving)1 0.137            1.15
+```
+]
+
+- All else held constant, for each additional square inch in painting's surface area, the price of the painting is predicted, on average, to be higher by a factor of 1.
+- All else held constant, paintings by a living artist are predicted, on average, to be higher by a factor of 1.15 compared to paintings by an artist who is no longer alive.
+- Paintings that are by an artist who is not alive and that have a surface area of 0 square inches are predicted, on average, to be 132 livres.
+
+---
+
+## What went wrong?
+
+.question[
+Why is our linear regression model different from what we got from `geom_smooth(method = "lm")`?
+]
+
+.pull-left[
+![](u2_d04-multiple-linear-regression_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+![](u2_d04-multiple-linear-regression_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## What went wrong? (cont.)
+
+- The way we specified our model only lets `artistliving` affect the intercept.
+- Model implicitly assumes that paintings with living and deceased artists have the *same slope* and only allows for *different intercepts*.  
+- What seems more appropriate in this case? 
+    + Same slope and same intercept for both colors
+    + Same slope and different intercept for both colors
+    + Different slope and different intercept for both colors?
+
+---
+
+## Interacting explanatory variables
+
+- Including an interaction effect in the model allows for different slopes, i.e. 
+nonparallel lines.
+- This implies that the regression coefficient for an explanatory variable would 
+change as another explanatory variable changes.
+- This can be accomplished by adding an interaction variable: the product of two 
+explanatory variables.
+
+---
+
+## Interaction: surface * artist living
+
+.small[
+
+```r
+ggplot(data = pp_Surf_lt_5000,
+       mapping = aes(y = log(price), x = Surface, 
+                     color = factor(artistliving))) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(method = "lm") +
+  labs(x = "Surface", y = "Log(price)", color = "Living artist")
+```
+
+![](u2_d04-multiple-linear-regression_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## Fit model with interaction effects
+
+- Response variable: log(price)
+- Explanatory variables: Surface area, artist living (0/1 variable), and 
+their interaction
+
+.midi[
+
+```r
+m_int &lt;- lm(log(price) ~ Surface + factor(artistliving) + 
+              Surface * factor(artistliving), 
+            data = pp_Surf_lt_5000)
+tidy(m_int)
+```
+
+```
+## # A tibble: 4 x 5
+##   term                           estimate std.error statistic    p.value
+##   &lt;chr&gt;                             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+## 1 (Intercept)                    4.91     0.0432       114.   0         
+## 2 Surface                        0.000206 0.0000442      4.65 0.00000337
+## 3 factor(artistliving)1         -0.126    0.119         -1.06 0.289     
+## 4 Surface:factor(artistliving)1  0.000479 0.000126       3.81 0.000139
+```
+]
+
+- Linear model:
+$$ \widehat{log(price)} = 4.91 + 0.00021~surface - 0.126~artistliving $$
+$$+ ~ 0.00048~surface \times artistliving $$
+
+---
+
+## Interpretation of interaction effects
+
+- Rate of change in price as the surface area of the painting increases does 
+vary between paintings by living and non-living artists (different slopes), 
+- Some paintings by living artists are more expensive than paintings by
+non-living artists, and some are not (different intercept).
+
+.small[
+.pull-left[
+- Non-living artist: 
+`\(\widehat{log(price)} = 4.91 + 0.00021~surface\)`
+`\(- 0.126 \times 0 + 0.00048~surface \times 0\)`
+`\(= 4.91 + 0.00021~surface\)`
+- Living artist: 
+`\(\widehat{log(price)} = 4.91 + 0.00021~surface\)`
+`\(- 0.126 \times 1 + 0.00048~surface \times 1\)`
+`\(= 4.91 + 0.00021~surface\)`
+`\(- 0.126 + 0.00048~surface\)`
+`\(= 4.784 + 0.00069~surface\)`
+]
+.pull-right[
+![](u2_d04-multiple-linear-regression_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
+]
+]
+
+---
+
+## Third order interactions
+
+- Can you? Yes
+- Should you? Probably not if you want to interpret these interactions in context
+of the data.
+
+---
+
+class: center, middle
+
+# Quality of fit in MLR
+
+---
+
+## R-squared
+
+- `\(R^2\)` is the percentage of variability in the response variable explained by the 
+regression model.
+
+
+```r
+glance(m_main)$r.squared
+```
+
+```
+## [1] 0.01320884
+```
+
+```r
+glance(m_int)$r.squared
+```
+
+```
+## [1] 0.0176922
+```
+
+--
+- Clearly the model with interactions has a higher `\(R^2\)`.
+
+--
+- However using `\(R^2\)` for model selection in models with multiple explanatory 
+variables is not a good idea as `\(R^2\)` increases when **any** variable is added 
+to the model.
+
+---
+
+## R-squared - first principles
+
+$$ R^2 =  \frac{ SS\_{Reg} }{ SS\_{Total} } = 1 - \left( \frac{ SS\_{Error} }{ SS\_{Total} } \right) $$
+
+.question[
+Calculate `\(R^2\)` based on the output below.
+]
+
+
+```r
+anova(m_main)
+```
+
+```
+## Analysis of Variance Table
+## 
+## Response: log(price)
+##                        Df  Sum Sq Mean Sq F value    Pr(&gt;F)
+## Surface                 1   138.5 138.537 40.6741 2.058e-10
+## factor(artistliving)    1     6.8   6.810  1.9994    0.1575
+## Residuals            3188 10858.4   3.406
+```
+
+---
+
+## Adjusted R-squared
+
+$$ R^2\_{adj} = 1 - \left( \frac{ SS\_{Error} }{ SS\_{Total} } \times \frac{n - 1}{n - k - 1} \right), $$
+
+where `\(n\)` is the number of cases and `\(k\)` is the number of predictors in the model
+
+--
+- Adjusted `\(R^2\)` doesn't increase if the new variable does not provide any new 
+informaton or is completely unrelated.
+
+--
+- This makes adjusted `\(R^2\)` a preferable metric for model selection in multiple
+regression models.
+
+---
+
+## In pursuit of Occam's Razor
+
+- Occam's Razor states that among competing hypotheses that predict equally well, 
+the one with the fewest assumptions should be selected.
+- Model selection follows this principle.
+- We only want to add another variable to the model if the addition of that
+variable brings something valuable in terms of predictive power to the model.
+- In other words, we prefer the simplest best model, i.e. **parsimonious** model.
+
+---
+
+## Comparing models
+
+It appears that adding the interaction actually increased adjusted `\(R^2\)`, so we 
+should indeed use the model with the interactions.
+
+
+```r
+glance(m_main)$adj.r.squared
+```
+
+```
+## [1] 0.01258977
+```
+
+```r
+glance(m_int)$adj.r.squared
+```
+
+```
+## [1] 0.01676753
+```
+
+---
+
+class: center, middle
+
+# Model selection
+
+---
+
+## Backwards elimination
+
+- Start with **full** model (including all candidate explanatory variables and 
+all candidate interactions)
+- Remove one variable at a time, and select the model with the highest adjusted 
+`\(R^2\)`
+- Continue until adjusted `\(R^2\)` does not increase
+
+---
+
+## Forward selection
+
+- Start with **empty** model
+- Add one variable (or interaction effect) at a time, and select the model 
+with the highest adjusted `\(R^2\)`
+- Continue until adjusted `\(R^2\)` does not increase
+
+---
+
+## Model selection and interaction effects
+
+Model selection for models including interaction effects must follow the 
+following two principles:
+
+- If an interaction is included in the model, the main effects of both of 
+those variables must also be in the model.
+- If a main effect is not in the model, then its interaction should not be 
+in the model.
+
+---
+
+## Other model selection criteria
+
+- Adjusted `\(R^2\)` is one model selection criterion
+- There are others out there (many many others!), we'll discuss some later in 
+the course, and some you might see in other courses
+
+---
+
+## Exploration 2
+
+### Price, surface area, material, shape
+
+.small[
+
+```r
+m_sms &lt;- lm(log(price) ~ Surface + mat + Shape, data = pp)
+tidy(m_sms) %&gt;%
+  print(n = 25)
+```
+
+```
+## # A tibble: 25 x 5
+##    term           estimate std.error statistic  p.value
+##    &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+##  1 (Intercept)    3.97     2.23         1.78   7.58e- 2
+##  2 Surface        0.000349 0.0000379    9.21   5.76e-20
+##  3 matal          0.860    2.23         0.385  7.00e- 1
+##  4 matar         -1.27     2.23        -0.567  5.71e- 1
+##  5 matb           1.59     1.30         1.22   2.21e- 1
+##  6 matbr          0.982    1.48         0.664  5.07e- 1
+##  7 matc           1.81     1.30         1.39   1.66e- 1
+##  8 matca         -0.538    1.83        -0.295  7.68e- 1
+##  9 matco         -0.342    1.50        -0.228  8.20e- 1
+## 10 mate           0.996    2.23         0.446  6.56e- 1
+## 11 matg           0.603    1.67         0.361  7.18e- 1
+## 12 math          -1.04     1.58        -0.657  5.11e- 1
+## 13 matm           3.24     2.26         1.43   1.52e- 1
+## 14 matmi          3.44     2.25         1.53   1.26e- 1
+## 15 mato           2.43     1.58         1.54   1.25e- 1
+## 16 matp           0.782    1.34         0.583  5.60e- 1
+## 17 matpa          2.95     1.50         1.97   4.87e- 2
+## 18 matt           0.885    1.30         0.681  4.96e- 1
+## 19 matta          0.521    1.31         0.396  6.92e- 1
+## 20 matv           0.531    1.41         0.376  7.07e- 1
+## 21 Shapeoval     -0.798    1.85        -0.430  6.67e- 1
+## 22 Shapeovale    -0.272    1.86        -0.146  8.84e- 1
+## 23 Shaperonde    -0.170    1.99        -0.0856 9.32e- 1
+## 24 Shaperound    -1.70     1.83        -0.929  3.53e- 1
+## 25 Shapesqu_rect -0.226    1.82        -0.124  9.01e- 1
+```
+]
+
+---
+
+## Shape and material
+
+Collapse levels of `Shape` and `mat`erial variables with `forcats::fct_collapse`:
+
+.small[
+
+```r
+pp &lt;- pp %&gt;%
+  mutate(
+    Shape = fct_collapse(Shape, oval = c("oval", "ovale"),
+                                round = c("round", "ronde"),
+                                squ_rect = "squ_rect",
+                                other = c("octogon", "octagon", "miniature")),
+    mat = fct_collapse(mat, metal = c("a", "br", "c"),
+                            canvas = c("co", "t", "ta"),
+                            paper = c("p", "ca"),
+                            wood = "b",
+                            other = c("e", "g", "h", "mi", "o", "pa", "v", "al", "ar", "m"))
+  )
+```
+]
+
+---
+
+## Review fixes
+
+.pull-left[
+
+```r
+pp %&gt;%
+  count(Shape)
+```
+
+```
+## # A tibble: 5 x 2
+##   Shape        n
+##   &lt;fct&gt;    &lt;int&gt;
+## 1 other       12
+## 2 oval        52
+## 3 round       74
+## 4 squ_rect  3219
+## 5 &lt;NA&gt;        36
+```
+]
+
+.pull-right[
+
+```r
+pp %&gt;%
+  count(mat)
+```
+
+```
+## # A tibble: 6 x 2
+##   mat        n
+##   &lt;fct&gt;  &lt;int&gt;
+## 1 metal    321
+## 2 other     59
+## 3 wood     886
+## 4 paper     38
+## 5 canvas  1783
+## 6 &lt;NA&gt;     306
+```
+]
+
+---
+
+### Price, surface area, material, shape
+
+
+```r
+m_sms &lt;- lm(log(price) ~ Surface + mat + Shape, data = pp)
+tidy(m_sms)
+```
+
+```
+## # A tibble: 9 x 5
+##   term           estimate std.error statistic  p.value
+##   &lt;chr&gt;             &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+## 1 (Intercept)    5.75     1.83          3.15  1.66e- 3
+## 2 Surface        0.000344 0.0000377     9.14  1.17e-19
+## 3 matother      -0.643    0.333        -1.93  5.38e- 2
+## 4 matwood       -0.189    0.120        -1.58  1.14e- 1
+## 5 matpaper      -1.10     0.343        -3.21  1.32e- 3
+## 6 matcanvas     -0.916    0.115        -7.95  2.52e-15
+## 7 Shapeoval     -0.519    1.84         -0.282 7.78e- 1
+## 8 Shaperound    -1.62     1.84         -0.884 3.77e- 1
+## 9 Shapesqu_rect -0.223    1.82         -0.123 9.02e- 1
+```
+
+---
+
+## Application exercise: &lt;br&gt; `ae-10-model-selection-pp`
+
+- First, plan the full model
+- Then, fit, evaluate, select
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "solarized-dark",
+"countIncrementalSlides": false,
+"mathjax": "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
