@@ -387,7 +387,7 @@ You now have a function that will scrape the relevant info on shows given its UR
 
 ---
 
-```{r scrape-urls}
+```{r scrape-urls, cache=TRUE}
 urls <- read_html("http://www.imdb.com/chart/tvmeter") %>%
   html_nodes(".titleColumn a") %>%
   html_attr("href") %>%

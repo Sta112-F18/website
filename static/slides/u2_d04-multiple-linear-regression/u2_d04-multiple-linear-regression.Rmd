@@ -18,16 +18,15 @@ output:
 ```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
 conflict_prefer("filter", "dplyr")
-library(knitr)
 library(broom)
-library(DT)
 library(plotly)
 library(widgetframe)
 ```
 
 ## Announcements
 
-- 
+- Peer evaluations due tonight at 11:59pm - 6/10 of you still need to fill them out
+- Project assignment is posted, due next Tuesday
 
 ---
 
@@ -66,7 +65,7 @@ $$\widehat{log(price)} = 4.77 + 0.0269 width - 0.0133 height$$
 
 ## Visualizing models with multiple predictors
 
-```{r plotly, echo=FALSE, warning=FALSE}
+```{r plotly, echo=FALSE, warning=FALSE, cache=TRUE}
 p <- plot_ly(pp, x = ~Width_in, y = ~Height_in, z = ~log(price),
         marker = list(size = 3,
                        color = "lightgray",
