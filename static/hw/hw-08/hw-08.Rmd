@@ -1,0 +1,223 @@
+---
+title: "HW 07 - Modeling course evaluations"
+subtitle: "Team assignment"
+date: "Due: Oct 30 at 10:05am"
+output: 
+  tufte::tufte_html:
+    tufte_variant: "envisioned"
+    highlight: pygments
+    css: ../hw.css
+---
+
+<div style= "float:right;position: relative; margin-left: 20px">
+```{r icon, echo=FALSE, fig.align="right", out.width=500}
+knitr::include_graphics("img/edwin-andrade-153753-unsplash.jpg")
+```
+</div>
+
+```{r setup, include=FALSE}
+library(DT)
+options(
+  htmltools.dir.version = FALSE, # for blogdown
+  show.signif.stars = FALSE      # for regression output
+  )
+knitr::opts_chunk$set(eval = TRUE, echo = FALSE)
+```
+
+```{marginfigure}
+Photo by [Edwin Andrade](https://unsplash.com/@theunsteady5) on [Unsplash](https://unsplash.com/).
+```
+
+Many college courses conclude by giving students the opportunity to evaluate the course and the instructor anonymously. However, the use of these student evaluations as an indicator of course quality and teaching effectiveness is often criticized because these measures may reflect the influence of non-teaching related characteristics, such as the physical appearance of the instructor. The article titled, "Beauty in the classroom: instructors’ pulchritude and putative pedagogical productivity" (Hamermesh and Parker, 2005) found that instructors who are viewed to be better looking receive higher instructional ratings. (Daniel S. Hamermesh, Amy Parker, Beauty in the classroom: instructors pulchritude and putative pedagogical productivity, Economics of Education Review, Volume 24, Issue 4, August 2005, Pages 369-376, ISSN 0272-7757, 10.1016/j.econedurev.2004.07.013. http://www.sciencedirect.com/science/article/pii/S0272775704001165.)
+
+For this assignment you will analyze the data from this study in order to learn what goes into a positive professor evaluation.
+
+The data were gathered from end of semester student evaluations for a large sample of professors from the University of Texas at Austin. In addition, six students rated the professors’ physical appearance. (This is a slightly modified version of the original data set that was released as part of the replication data for Data Analysis Using Regression and Multilevel/Hierarchical Models (Gelman and Hill, 2007).) The result is a data frame where each row contains a different course and columns represent variables about the courses and professors.
+
+# Packages
+
+In this lab we will work with the `tidyverse` and `broom` packages. We can install and load them with the following:
+
+```{marginfigure}
+When you install the tidyverse package, a long list of packages get installed with it. However when you load it (with the `library` function) only a few of them get loaded, e.g. `dplyr`, `ggplot2`, and `forcats`. The broom package is installed with the tidyverse, but we need to load it separately in order to make use of it.
+```
+
+```{r load-packages, eval=TRUE, echo=TRUE, message=FALSE}
+library(tidyverse)
+library(broom)
+```
+
+# The data
+
+In this lab you will first download the data, then upload it to the `data/` folder in your RStudio Cloud project.
+
+```{r data-upload, fig.margin = TRUE, echo = FALSE, eval=TRUE, fig.width=3}
+knitr::include_graphics("img/data-upload.png")
+```
+
+- Click [here](http://www2.stat.duke.edu/courses/Fall18/sta112.01/hw/data/evals-mod.csv) 
+to download the data. The file is called `evals-mod.csv`.
+- Navigate to the data folder in your project and upload the `evals-mod.csv` file.
+
+Then, you can load the data as usual using the following.
+
+```{r data, eval=FALSE}
+evals <- read_csv("data/evals-mod.csv")
+```
+
+## Codebook
+
+| Variable name    | Description 
+|:--------|:-------------------------------
+| `score` 		     | Average professor evaluation score: (1) very unsatisfactory - (5) excellent
+| `rank` 		       | Rank of professor: teaching, tenure track, tenure
+| `ethnicity` 	   | Ethnicity of professor: not minority, minority
+| `gender` 		     | Gender of professor: female, male
+| `language` 	     | Language of school where professor received education: english or non-english
+| `age` 		       | Age of professor
+| `cls_perc_eval`  | Percent of students in class who completed evaluation
+| `cls_did_eval`   | Number of students in class who completed evaluation
+| `cls_students`   | Total number of students in class
+| `cls_level` 	   | Class level: lower, upper
+| `cls_profs` 	   | Number of professors teaching sections in course in sample: single, multiple
+| `cls_credits`    | Number of credits of class: one credit (lab, PE, etc.), multi credit
+| `bty_f1lower`    | Beauty rating of professor from lower level female: (1) lowest - (10) highest
+| `bty_f1upper`    | Beauty rating of professor from upper level female: (1) lowest - (10) highest
+| `bty_f2upper`    | Beauty rating of professor from upper level female: (1) lowest - (10) highest
+| `bty_m1lower`    | Beauty rating of professor from lower level male: (1) lowest - (10) highest
+| `bty_m1upper`    | Beauty rating of professor from upper level male: (1) lowest - (10) highest
+| `bty_m2upper`    | Beauty rating of professor from upper level male: (1) lowest - (10) highest
+
+# Exercises
+
+## Part 1: Data Manipulation 
+
+```{marginfigure}
+Remember that `.` places the result of the previous step in the pipeline, in this 
+case the `evals` data frame, where it appears in the next step. Here, we are
+`select()`ing variables from the `evals` data frame that `start_with()` a 
+given text string.
+```
+
+1.  Create a new variable called `bty_avg` that is the average attractiveness
+    score of the six students for each professor (`bty_f1lower` through `bty_m2upper`). 
+    Add this new variable to the `evals` data frame. Incomplete code is given 
+    below to guide you in the right direction, however you will need to fill in 
+    the blanks. *Hint:* What text string do the variables that need to be all 
+    averaged start with?
+
+```{r eval=FALSE}
+___ <- evals %>%
+  ___(bty_avg = select(., starts_with("___")) %>% rowMeans())
+```
+
+## Part 2: Exploratory Data Analysis
+
+2.  Visualize the distribution of `score`. Is the distribution skewed? What does 
+    that tell you about how students rate courses? Is this what you expected to 
+    see? Why, or why not? Include any summary statistics and visualizations
+    you use in your response.
+
+```{marginfigure}
+**Hint:** See the help page for the function at http://ggplot2.tidyverse.org/reference/index.html.
+```
+
+3.  Visualize the relationship between `score` and the new variable you 
+    created, `bty_avg`. Then, replot the scatterplot from Exercise 3, but this 
+    time use `geom_jitter()`? What does "jitter" mean? What was misleading about 
+    the initial scatterplot?
+
+## Part 3: Evaluation scores vs. beauty scores
+
+Let's see if the apparent trend in the plot is something more than natural 
+variation. 
+    
+```{marginfigure}
+Linear model is in the form $\hat{y} = b_0 + b_1 x$.
+```
+
+4.  Fit a linear model called `m_bty` to predict average professor evaluation 
+    `score` by average beauty rating (`bty_avg`).  
+    **(a)** Based on the regression output, write the linear model.  
+    **(b)** Replot your visualization from Exercise 3, and add the regression 
+    line to this plot. Turn off the shading for the uncertainty of the line.  
+    **(c)** Interpret the slope of the linear model in context of the data.  
+    **(d)** Interpret the intercept of the linear model in context of the data. 
+    Comment on whether the intercept makes sense in this context.
+    
+5.  Determine the $R^2$ of the model and interpret it in context of the data.
+
+## Part 4: Evaluation scores vs. beauty scores and gender
+
+Next, we consider beauty scores and gender together.
+
+6.  Fit a linear model,`m_bty_gen`, predicting average professor evaluation 
+    `score` based on average beauty rating (`bty_avg`) and `gender`. 
+    Write the linear model, and note the $R^2$ and the adjusted $R^2$.
+    
+7.  **(a)** What is the equation of the line corresponding to male professors?   
+    **(b)** What is it for female professors?  
+    **(c)** For two professors who received the same beauty rating, which gender 
+    tends to have the higher course evaluation score?  
+    **(d)** How does the relationship between beauty and evaluation score vary 
+    between male and female professors?
+
+8.  Compare the slopes of `bty_avg` under the two models (`m_bty` and `m_bty_gen`). 
+    Has the addition of `gender` to the model changed the parameter estimate 
+    (slope) for `bty_avg`?
+    
+9.  How do the adjusted $R^2$ values of `m_bty_gen` and `m_bty` compare? What 
+    does this tell us about how useful `gender` is in explaining the variability 
+    in evaluation scores when we already have information on the beaty score of 
+    the professor.
+
+## Part 5: Evaluation scores vs. beauty scores and rank
+
+Now we turn our attention to beauty scores and rank.
+
+10. Fit a new linear model called `m_bty_rank` to predict average professor 
+    evaluation `score` average beauty rating (`bty_avg`) and `rank`. Based on the 
+    regression output, write the linear model and interpret the slopes and the 
+    intercept in context of the data.
+    
+```{marginfigure}
+See the course slides on using the **forcats** package, specifically the `fct_relevel()` function, for changing the order of levels.
+```
+
+11. Create a new variable called `rank_relevel` where `"tenure track"` is the 
+    baseline level. 
+
+12. Fit a new linear model called `m_bty_rank_relevel` to predict average professor 
+    evaluation `score` based on `rank_relevel` of the professor. This is the new 
+    (releveled) variable you created in Exercise 13. How is the regression output 
+    for this model similar to / different from the regression output for 
+    `m_bty_rank`? How do the $R^2$s of these models compare? Is this expected? 
+    Explain your reasoning.
+
+## Part 6: The search for the best model
+
+Going forward, only consider the following variables as potential predictors: 
+`rank`, `ethnicity`, `gender`, `language`, `age`, `cls_perc_eval`, `cls_did_eval`, 
+`cls_students`, `cls_level`, `cls_profs`, `cls_credits`, `bty_avg`.
+
+13. Which variable, on its own, would you expect to be the worst predictor of 
+    evaluation scores? Why? *Hint:* Think about which variable would you 
+    expect to not have any association with the professor's score.
+
+14. Check your suspicions from the previous exercise. Include the model output
+    for that variable in your response.
+    
+15. Suppose you wanted to fit a full model with the variables listed above. If 
+    you are already going to include `cls_perc_eval` and `cls_students`, which 
+    variable should you not include as an additional predictor? Why?
+
+16. Fit a full model with all predictors listed above (except for the one you 
+    decided to exclude) in the previous question. Then, using backward-selection 
+    with adjusted R-squared as the selection criterion, determine the *best* model. 
+    You do not need to show all steps in your answer, just the output for the final 
+    model. Also, write out the linear model for predicting score based on the final 
+    model you settle on.
+
+17. Based on your final model, describe the characteristics of a professor and 
+    course at University of Texas at Austin that would be associated with a high
+    evaluation score.
