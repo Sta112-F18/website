@@ -1,6 +1,6 @@
 ---
 title: "Showcase your inner data scientist"
-date: "Proposal due: Oct 30, project due: Dec 14"
+date: "Proposal due: Nov 20, project due: Dec 14"
 output: 
   html_document: 
     css: hw.css
@@ -51,7 +51,7 @@ class.
 
 ## Components
 
-### Project proposal - due Tue, Oct 30
+### Project proposal - due Tue, Nov 20
 
 This is a draft of the introduction section of your project as well as a 
 data analysis plan and your dataset. Each section should be no more than 1 
