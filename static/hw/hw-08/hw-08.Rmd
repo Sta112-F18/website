@@ -106,7 +106,7 @@ given text string.
     the blanks. *Hint:* What text string do the variables that need to be all 
     averaged start with?
 
-```{r eval=FALSE}
+```{r eval=FALSE, echo=TRUE}
 ___ <- evals %>%
   ___(bty_avg = select(., starts_with("___")) %>% rowMeans())
 ```

@@ -17,7 +17,7 @@ output:
 
 ```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
-#conflict_prefer("filter", "dplyr")
+conflict_prefer("filter", "dplyr")
 library(broom)
 library(DT)
 ```
