@@ -145,14 +145,14 @@ blockquote {
 ul {
   list-style: none;
 }
-li::before {
+ul li::before {
   content: "✚"; 
   color: #A7D5E8; 
   display: inline-block; 
   width: 1.5em;
   margin-left: -1.5em
 }
-li{
+ul li{
   margin: 10px 0;
 }
 
