@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Model validation + prediction  🔮</title>
+    <meta charset="utf-8">
+    <meta name="author" content="" />
+    <link href="libs/font-awesome/css/fa-svg-with-js.css" rel="stylesheet" />
+    <script src="libs/font-awesome/js/fontawesome-all.min.js"></script>
+    <script src="libs/font-awesome/js/fa-v4-shims.min.js"></script>
+    <link rel="stylesheet" href="../slides.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Model validation +<br>prediction<br> 🔮
+
+---
+
+
+
+
+
+layout: true
+  
+&lt;div class="my-footer"&gt;
+&lt;span&gt;
+Dr. Mine Çetinkaya-Rundel -
+&lt;a href="http://www2.stat.duke.edu/courses/Fall18/sta112.01/schedule" target="_blank"&gt;stat.duke.edu/courses/Fall18/sta112.01
+&lt;/a&gt;
+&lt;/span&gt;
+&lt;/div&gt; 
+
+---
+
+
+
+class: center, middle
+
+# Model selection
+
+---
+
+## Data: Course evals
+
+
+```r
+# Load data
+evals &lt;- read_csv("data/evals-mod.csv")
+
+# Calculate bty_avg
+evals &lt;- evals %&gt;%
+  mutate(
+    bty_avg = select(., starts_with("bty")) %&gt;% rowMeans()
+    )
+```
+
+---
+
+## Full model
+
+.question[
+What percent of the variability in evaluation scores is explained by the model?
+]
+
+
+```r
+full_model &lt;- lm(score ~ rank + ethnicity + gender + 
+                         language + age + cls_perc_eval + 
+                         cls_did_eval + cls_students + 
+                         cls_level + cls_profs + 
+                         cls_credits + bty_avg, data = evals)
+```
+
+
+```r
+glance(full_model)$r.squared
+```
+
+```
+## [1] 0.1644867
+```
+
+```r
+glance(full_model)$adj.r.squared
+```
+
+```
+## [1] 0.1402959
+```
+
+---
+
+## Akaike Information Criterion
+
+$$ AIC = -2log(L) + 2k $$
+
+- `\(L\)`: likelihood	of the	model
+    - Likelihood of seeing these data	given	the estimated model parameters
+    - Won't go into calculating it in this course (but you will in future courses)
+--
+- Used for model selection, lower the better
+    - Value is not informative on its own
+--
+- Applies	a	penalty	for	number of parameters in the	model, `\(k\)`
+    - Different penalty than adjusted `\(R^2\)` but similar idea
+--
+
+
+```r
+glance(full_model)$AIC
+```
+
+```
+## [1] 695.7457
+```
+
+---
+
+## Model selection -- a little faster
+
+
+```r
+selected_model &lt;- step(full_model, direction = "backward")
+```
+--
+
+```r
+tidy(selected_model) %&gt;% select(term, estimate)
+```
+
+```
+## # A tibble: 8 x 2
+##   term                  estimate
+##   &lt;chr&gt;                    &lt;dbl&gt;
+## 1 (Intercept)            3.45   
+## 2 ethnicitynot minority  0.205  
+## 3 gendermale             0.185  
+## 4 languagenon-english   -0.161  
+## 5 age                   -0.00501
+## 6 cls_perc_eval          0.00509
+## 7 cls_creditsone credit  0.515  
+## 8 bty_avg                0.0650
+```
+
+---
+
+## Selected variables
+
+| variable     | selected    |
+| ------------ | :----------:|
+| rank         |             |
+| ethnicity    | x           |
+| gender       | x           |
+| language     | x           |
+| age          | x           |
+| cls_perc_eval| x           |
+| cls_did_eval |             |
+| cls_students |             |
+| cls_level    |             |
+| cls_profs    |             |
+| cls_credits  | x           |
+| bty_avg      | x           |
+
+---
+
+## Coefficient interpretation
+
+.question[
+Interpret the slopes of `gender` and `bty_avg` in context of the data.
+]
+
+
+```r
+tidy(selected_model) %&gt;% 
+  select(term, estimate)
+```
+
+```
+## # A tibble: 8 x 2
+##   term                  estimate
+##   &lt;chr&gt;                    &lt;dbl&gt;
+## 1 (Intercept)            3.45   
+## 2 ethnicitynot minority  0.205  
+## 3 gendermale             0.185  
+## 4 languagenon-english   -0.161  
+## 5 age                   -0.00501
+## 6 cls_perc_eval          0.00509
+## 7 cls_creditsone credit  0.515  
+## 8 bty_avg                0.0650
+```
+
+---
+
+## AIC
+
+
+```r
+glance(full_model)$AIC
+```
+
+```
+## [1] 695.7457
+```
+
+
+```r
+glance(selected_model)$AIC
+```
+
+```
+## [1] 687.5712
+```
+
+---
+
+## Parsimony
+
+&lt;div class="question"&gt;
+Take a look at the variables in the full and the selected model. Can you guess
+why some of them may have been dropped? Remember: We like parsimonous models.
+&lt;/div&gt;
+
+.small[
+| variable     | selected    |
+| ------------ | :----------:|
+| rank         |             |
+| ethnicity    | x           |
+| gender       | x           |
+| language     | x           |
+| age          | x           |
+| cls_perc_eval| x           |
+| cls_did_eval |             |
+| cls_students |             |
+| cls_level    |             |
+| cls_profs    |             |
+| cls_credits  | x           |
+| bty_avg      | x           |
+]
+
+---
+
+class: center, middle
+
+# Model validation
+
+---
+
+## Overfitting
+
+- The data we are using to construct our models come from a larger population.
+
+--
+- Ultimately we want our model to tell us how the population works, not just the sample we have.
+
+--
+- If the model we fit is too tailored to our sample, it might not perform as well with the remaining population. This means the model is "overfitting" our data.
+
+--
+- We measure this using **model validation** techniques.
+
+--
+- Overfitting is not a huge concern with linear models with low level 
+interactions, however it can be with more complex and flexible models. The 
+following is just an example of model validation, even though we're using it 
+in a scenario where the concern for overfitting is not high.
+
+---
+
+## Model validation
+
+One commonly used model validation technique is to partition your data into 
+training and testing set
+
+- Fit the model on the training data
+- Test it on the testing data
+- Evaluate model performance using root-mean squared error (RMSE)
+
+$$ RMSE = \sqrt{\frac{\sum_{i = 1}^n (y_i - \hat{y}_i)^2}{n}} $$
+--
+.question[
+Do you think we should prefer low or high RMSE?
+]
+
+---
+
+## Cross validation
+
+More specifically, **k-fold cross validation**:
+
+- Split your data into k folds
+- Use 1 fold for testing and the remaining (k - 1) folds for training
+- Repeat k times
+
+&lt;br&gt;
+
+--
+.question[
+Describe what result we obtain as a result of cross validation, and how we 
+decide whether a model is a good fit or not based on this result.
+]
+
+---
+
+## Random sampling and reproducibility
+
+Gotta set a seed!
+
+```r
+set.seed(3518)
+```
+
+- Use different seeds from each other
+- Need inspiration? https://www.random.org/
+
+---
+
+## Prepping your data for 5-fold CV
+
+Create 5 random partitions of your data, roughly equally sized.
+
+
+```
+## # A tibble: 5 x 2
+##    fold     n
+##   &lt;dbl&gt; &lt;int&gt;
+## 1     1    93
+## 2     2    93
+## 3     3    93
+## 4     4    92
+## 5     5    92
+```
+
+---
+
+## modelr `\(\in\)` tidyverse
+
+.pull-left[
+![](img/modelr-part-of-tidyverse.png)
+]
+.pull-right[
+The modelr package provides functions that help you create 
+elegant pipelines when modelling.
+
+```r
+library(modelr)
+```
+]
+
+.footnote[
+[modelr.tidyverse.org](https://modelr.tidyverse.org)
+]
+
+---
+
+## CV 1
+
+.question[
+Describe what is happening in the code below.
+]
+
+
+```r
+test_fold &lt;- 1
+```
+
+
+```r
+test &lt;- evals %&gt;% filter(fold == test_fold)
+train &lt;- evals %&gt;% anti_join(test, by = "id")
+```
+
+
+```r
+mod &lt;- lm(score ~ ethnicity + gender + language + age + 
+                  cls_perc_eval + cls_credits + bty_avg, 
+                  data = train)
+```
+
+
+```r
+(rmse_test1 &lt;- rmse(mod, test))
+```
+
+```
+## [1] 0.5342967
+```
+
+---
+
+## RMSE on training vs. testing
+
+.question[
+Would you expect the RMSE to be higher for your training data or your testing data? Why?
+]
+
+---
+
+## RMSE on training vs. testing
+
+RMSE for testing:
+
+```r
+(rmse_test1 &lt;- rmse(mod, test))
+```
+
+```
+## [1] 0.5342967
+```
+
+RMSE for training:
+
+```r
+(rmse_train1 &lt;- rmse(mod, train))
+```
+
+```
+## [1] 0.4909194
+```
+
+---
+
+## CV 2
+
+
+```r
+test_fold &lt;- 2
+test &lt;- evals %&gt;% filter(fold == test_fold)
+train &lt;- evals %&gt;% anti_join(test, by = "id")
+mod &lt;- lm(score ~ ethnicity + gender + language + age + 
+                  cls_perc_eval + cls_credits + bty_avg, 
+                  data = train)
+```
+
+
+```r
+(rmse_test2 &lt;- rmse(mod, test))
+```
+
+```
+## [1] 0.4784854
+```
+
+```r
+(rmse_train2 &lt;- rmse(mod, train))
+```
+
+```
+## [1] 0.5046395
+```
+
+---
+
+## CV 3
+
+
+```r
+test_fold &lt;- 3
+test &lt;- evals %&gt;% filter(fold == test_fold)
+train &lt;- evals %&gt;% anti_join(test, by = "id")
+mod &lt;- lm(score ~ ethnicity + gender + language + age + 
+                  cls_perc_eval + cls_credits + bty_avg, 
+                  data = train)
+```
+
+
+```r
+(rmse_test3 &lt;- rmse(mod, test))
+```
+
+```
+## [1] 0.5349022
+```
+
+```r
+(rmse_train3 &lt;- rmse(mod, train))
+```
+
+```
+## [1] 0.4905939
+```
+
+---
+
+## CV 4
+
+
+```r
+test_fold &lt;- 4
+test &lt;- evals %&gt;% filter(fold == test_fold)
+train &lt;- evals %&gt;% anti_join(test, by = "id")
+mod &lt;- lm(score ~ ethnicity + gender + language + age + 
+                  cls_perc_eval + cls_credits + bty_avg, 
+                  data = train)
+```
+
+
+```r
+(rmse_test4 &lt;- rmse(mod, test))
+```
+
+```
+## [1] 0.4734269
+```
+
+```r
+(rmse_train4 &lt;- rmse(mod, train))
+```
+
+```
+## [1] 0.5058464
+```
+
+---
+
+## CV 5
+
+
+```r
+test_fold &lt;- 5
+test &lt;- evals %&gt;% filter(fold == test_fold)
+train &lt;- evals %&gt;% anti_join(test, by = "id")
+mod &lt;- lm(score ~ ethnicity + gender + language + age + 
+                  cls_perc_eval + cls_credits + bty_avg, 
+                  data = train)
+```
+
+
+```r
+(rmse_test5 &lt;- rmse(mod, test))
+```
+
+```
+## [1] 0.5195258
+```
+
+```r
+(rmse_train5 &lt;- rmse(mod, train))
+```
+
+```
+## [1] 0.4952971
+```
+
+---
+
+## Putting it altogether
+
+.small[
+
+```r
+rmse_evals &lt;- tibble(
+  test_fold  = 1:5,
+  rmse_train = c(rmse_train1, rmse_train2, rmse_train3, rmse_train4, rmse_train5),
+  rmse_test  = c(rmse_test1, rmse_test2, rmse_test3, rmse_test4, rmse_test5)
+)
+```
+
+
+```r
+ggplot(data = rmse_evals, mapping = aes(x = rmse_test)) +
+  geom_histogram(binwidth=0.02)
+```
+
+![](u2_d06-predict-validate_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+]
+
+---
+
+## How does RMSE compare to y?
+
+- `score` summary stats:
+
+
+```
+## # A tibble: 1 x 6
+##     min   max  mean   med    sd   IQR
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1   2.3     5  4.17   4.3 0.544 0.800
+```
+
+- `rmse_test` summary stats:
+
+
+```
+## # A tibble: 1 x 6
+##     min   max  mean   med     sd    IQR
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+## 1 0.473 0.535 0.508 0.520 0.0301 0.0558
+```
+
+---
+
+## Cross-validation -- a little faster
+
+- Partition data into k folds with `modelr::crossv_kfold`
+- Then use `purrr::map` to fit the model on each of the training datasets
+- Calculate RMSEs for each of the models on the testing set
+
+---
+
+## Partition data into k folds.
+
+k = 5:
+
+
+```r
+evals_cv &lt;- crossv_kfold(evals, 5)
+evals_cv
+```
+
+```
+## # A tibble: 5 x 3
+##   train          test           .id  
+##   &lt;list&gt;         &lt;list&gt;         &lt;chr&gt;
+## 1 &lt;S3: resample&gt; &lt;S3: resample&gt; 1    
+## 2 &lt;S3: resample&gt; &lt;S3: resample&gt; 2    
+## 3 &lt;S3: resample&gt; &lt;S3: resample&gt; 3    
+## 4 &lt;S3: resample&gt; &lt;S3: resample&gt; 4    
+## 5 &lt;S3: resample&gt; &lt;S3: resample&gt; 5
+```
+
+---
+
+## Fit model on each of training set
+
+
+```r
+models &lt;- map(evals_cv$train, ~ 
+              lm(score ~ ethnicity + gender + language + 
+                         age + cls_perc_eval + cls_credits + 
+                         bty_avg, data = .))
+```
+
+---
+
+## Calculate RMSEs
+
+
+```r
+rmses &lt;- map2_dbl(models, evals_cv$test, rmse)
+rmses
+```
+
+```
+##         1         2         3         4         5 
+## 0.4827077 0.5587464 0.4683094 0.5087561 0.5160284
+```
+
+
+---
+
+class: center, middle
+
+# Prediction
+
+---
+
+## New observation
+
+To make a prediction for a new observation we need to create a data frame with that observation.
+
+&lt;div class="question"&gt;
+Suppose we want to make a prediction for a 35 year old white woman professor who received her education at an English speaking country and who teaches a multi credit course. 80% of her classes tend to fill out evaluations, and she's average looiking (beauty score = 2.5).
+&lt;br&gt;&lt;br&gt;
+The following won't work. Why? How would you correct it?
+&lt;/div&gt;
+
+
+```r
+new_prof &lt;- data_frame(ethnicity = "white",
+                       sex = "woman",
+                       language = "English",
+                       age = 35, 
+                       cls_perc_eval = 0.80,
+                       cls_credits = "multi-credit",
+                       bty_avg = 2.5)
+```
+
+---
+
+## New observation, corrected
+
+
+```r
+new_prof &lt;- data_frame(ethnicity = "not minority",
+                       gender = "female",
+                       language = "english",
+                       age = 35, 
+                       cls_perc_eval = 0.80,
+                       cls_credits = "multi credit",
+                       bty_avg = 2.5)
+```
+
+---
+
+## Prediction
+
+
+```r
+predict(selected_model, newdata = new_prof)
+```
+
+```
+##        1 
+## 3.642981
+```
+
+---
+
+## Uncertainty around prediction
+
+- Confidence interval around `\(\bar{y}\)` for new data (average score for profs with given characteristics):
+
+
+```r
+predict(selected_model, newdata = new_prof, interval = "confidence")
+```
+
+```
+##        fit      lwr      upr
+## 1 3.642981 3.406178 3.879785
+```
+
+- Prediction interval around `\(\hat{y}\)` for new data (average score for profs with given characteristics):
+
+
+```r
+predict(selected_model, newdata = new_prof, interval = "prediction")
+```
+
+```
+##        fit      lwr      upr
+## 1 3.642981 2.626502 4.659461
+```
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true,
+"highlightStyle": "solarized-dark",
+"countIncrementalSlides": false,
+"mathjax": "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

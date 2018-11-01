@@ -1,0 +1,22 @@
+---
+title: "Reading 05"
+date: "Due: Nov 1"
+output: 
+  html_document: 
+    theme: yeti
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+- Cross-Validation: [Introduction to Statistical Learning](https://www-bcf.usc.edu/~gareth/ISL/ISLR%20First%20Printing.pdf), pages 175 - 184 
+    
+- Watch: https://www.youtube.com/watch?v=TIgfjmp-4BA
+    
+    
+
+
+
+
+
