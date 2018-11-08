@@ -22,6 +22,7 @@ options(
   show.signif.stars = FALSE      # for regression output
   )
 knitr::opts_chunk$set(eval = TRUE, echo = FALSE)
+conflict_prefer("filter", "dplyr")
 ```
 
 ```{marginfigure}
@@ -46,7 +47,7 @@ of population parameters of intertest about US adults.[^1]
 
 In this lab we will work with the `tidyverse` and `infer` packages.
 
-```{r eval = TRUE}
+```{r eval = TRUE, echo=TRUE, message = FALSE}
 library(tidyverse) 
 library(infer)
 ```
@@ -175,21 +176,21 @@ email weekly. The responses to these questions are recorded in the `emailhr` and
 `emailmin` variables. For example, if the response is 2.5 hrs, this would be 
 recorded as `emailhr = 2` and `emailmin = 30`.
 
-8. Create a new variable that combines these two variables to reports the number 
-of minutes the respondents spend on email weekly.
+9. Create a new variable called `email` that combines these two variables to 
+reports the number of minutes the respondents spend on email weekly.
 
-9. Filter the data for only those who have non `NA` entries for `email`. Do not 
+10. Filter the data for only those who have non `NA` entries for `email`. Do not 
 overwrite the data frame (you'll need the full data later). Instead save the 
 resulting data frame with a new name.
 
-10. Visualize the distribution of this new variable. Find the mean and the median 
+11. Visualize the distribution of this new variable. Find the mean and the median 
 number of minutes respondents spend on email weekly. Is the mean or the median a 
 better measure of the typical amoung of time Americans spend on email weekly? Why?
 
-11. Describe how bootstrapping can be used to estimate the typical amount of time 
+12. Describe how bootstrapping can be used to estimate the typical amount of time 
 all Americans spend on email weekly.
 
-12. Calculate a 90% bootstrap confidence interval for the typical amount of time 
+13. Calculate a 90% bootstrap confidence interval for the typical amount of time 
 Americans spend on email weekly. Interpret this interval in context of the data, 
 reporting its endpoints in "humanized" units (e.g. instead of 108 minutes, report 
 1 hr and 8 minutes). If you get a result that seems a bit odd, discuss why you think 
@@ -272,7 +273,7 @@ boot_diffeduc_born <- gss_educ %>%
   calculate(stat = "diff in means", order = c("Yes", "No"))
 ```
 
-13. Visualize the distribution of these bootstrap differences in medians. Find a 
+14. Visualize the distribution of these bootstrap differences in means. Find a 
 99% confidence interval for the difference between the population averages of 
 number of years of education between those born and not born in the US and 
 interpret this interval in context of the data.
@@ -303,24 +304,24 @@ liberal, Moderate, Slghtly conservative, Conservative, Extrmly conservative.
 Responses that were originally Don't know, No answer and Not applicable are 
 already mapped to `NA`s upon data import.
 
-14. In a new variable, recode `advfront` such that Strongly Agree and Agree are 
+15. In a new variable, recode `advfront` such that Strongly Agree and Agree are 
 mapped to `"Yes"`, and Disagree and Strongly disagree are mapped to `"No"`. The 
 remaining levels can be left as is.
 
-15. In a new variable, recode `polviews` such that Extremely liberal, Liberal, 
+16. In a new variable, recode `polviews` such that Extremely liberal, Liberal, 
 and Slightly liberal, are mapped to `"Liberal"`, and Slghtly conservative, 
 Conservative, and Extrmly conservative disagree are mapped to `"Conservative"`. 
 The remaining levels can be left as is.
 
-16. Filter the data for respondents who identified as liberal or conservative and 
+17. Filter the data for respondents who identified as liberal or conservative and 
 who responded yes or no to the science research question. Save the resulting data 
 frame with a different name so that you don't overwrite the data.
 
-17. Describe how bootstrapping can be used to estimate the difference in proportion 
+18. Describe how bootstrapping can be used to estimate the difference in proportion 
 of libreals and not liberals who think science research is necessary and should be 
 supported by the federal government.
 
-18. Construct a 90% bootstrap confidence interval for the difference in proportion 
+19. Construct a 90% bootstrap confidence interval for the difference in proportion 
 of liberals and conservatives who think science research is necessary and should 
 be supported by the federal government. Interpret this interval in context of 
 the data. 
